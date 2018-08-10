@@ -1,0 +1,7 @@
+D:\Lap\AlbiruniML\AlbiruniML.Test\bin\Debug\AlbiruniML.Test.dll
+D:\Lap\AlbiruniML\AlbiruniML.Test\bin\Debug\AlbiruniML.Test.pdb
+D:\Lap\AlbiruniML\AlbiruniML.Test\bin\Debug\AlbiruniML.dll
+D:\Lap\AlbiruniML\AlbiruniML.Test\bin\Debug\AlbiruniML.pdb
+D:\Lap\AlbiruniML\AlbiruniML.Test\obj\Debug\AlbiruniML.Test.csprojResolveAssemblyReference.cache
+D:\Lap\AlbiruniML\AlbiruniML.Test\obj\Debug\AlbiruniML.Test.dll
+D:\Lap\AlbiruniML\AlbiruniML.Test\obj\Debug\AlbiruniML.Test.pdb

@@ -1,0 +1,2402 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AlbiruniML</name>
+    </assembly>
+    <members>
+        <member name="M:AlbiruniML.Ops.multiRNNCell(AlbiruniML.LSTMCellFunc[],AlbiruniML.Tensor,AlbiruniML.Tensor[],AlbiruniML.Tensor[])">
+            <summary>
+             Computes the next states and outputs of a stack of LSTMCells.
+            
+             Each cell output is used as input to the next cell.
+            
+             Returns `[cellState, cellOutput]`.
+            
+             Derived from tf.contrib.rn.MultiRNNCell.
+            </summary>
+            <param name="lstmCells">Array of LSTMCell functions.</param>
+            <param name="data">The input to the cell.</param>
+            <param name="c">Array of previous cell states.</param>
+            <param name="h">Array of previous cell outputs.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.basicLSTMCell(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor)">
+             <summary>
+             Computes the next state and output of a BasicLSTMCell.
+             Returns `[newC, newH]`.
+            
+             Derived from tf.contrib.rnn.BasicLSTMCell.
+             </summary>
+             <param name="forgetBias">Forget bias for the cell.</param>
+             <param name="lstmKernel">The weights for the cell.</param>
+             <param name="lstmBias">The bias for the cell.</param>
+             <param name="data">The input to the cell.</param>
+             <param name="c">Previous cell state.</param>
+             <param name="h">Previous cell output.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.basicGRUCell(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Computes the next state and output of a basicGRUCell.
+            Returns `[newC, newH]`. 
+            </summary>
+            <param name="forgetBias">Forget bias for the cell.</param>
+            <param name="gruKernel">The weights for the cell.</param>
+            <param name="gruBias">The bias for the cell.</param>
+            <param name="data">The input to the cell.</param>
+            <param name="c">Previous cell state.</param>
+            <param name="h">Previous cell output.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.tensor(System.Single[],System.Int32[])">
+             <summary> 
+            Creates a `Tensor` with the provided values, shape. 
+             </summary>
+             <param name="values">The values of the tensor</param>
+             <param name="shape">The shape of the tensor. Optional. If not provided it is inferred from `values`.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.scalar(System.Single)">
+            <summary>
+            Creates rank-0 `Tensor` (scalar) with the provided value .
+            The same functionality can be achieved with `tensor`, but in general
+            we recommend using `scalar` as it makes the code more readable.
+            </summary>
+            <param name="value"> The value of the scalar</param> 
+        </member>
+        <member name="M:AlbiruniML.Ops.tensor1d(System.Single[])">
+            <summary>
+             Creates rank-1 `Tensor` with the provided values, shape.
+             The same functionality can be achieved with `tensor`, but in general
+             we recommend using `tensor1d` as it makes the code more readable.
+            </summary>
+            <param name="value">The values of the tensor. Can be array of numbers or boolean</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.tensor2d(System.Single[],System.Int32,System.Int32)">
+            <summary>
+            Creates rank-2 `Tensor` with the provided values, shape .
+            The same functionality can be achieved with `tensor`, but in general
+            we recommend using `tensor2d` as it makes the code more readable.
+            </summary>
+            <param name="value">The values of the tensor. Can be array of numbers or boolean</param>
+            <param name="d1">first dimension</param>
+            <param name="d2">second dimension</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.tensor3d(System.Single[],System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates rank-3 `Tensor` with the provided values, shape.
+            The same functionality can be achieved with `tensor`, but in general
+            we recommend using `tensor3d` as it makes the code more readable.
+            </summary>
+            <param name="value">The values of the tensor. Can be array of numbers or boolean</param>
+            <param name="d1">first dimension</param>
+            <param name="d2">second dimension</param>
+            <param name="d3">third dimension</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.tensor4d(System.Single[],System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates rank-4 `Tensor` with the provided values, shape.
+            The same functionality can be achieved with `tensor`, but in general
+            we recommend using `tensor4d` as it makes the code more readable.
+            </summary>
+            <param name="value"></param>
+            <param name="d1">first dimension</param>
+            <param name="d2">second dimension</param>
+            <param name="d3">third dimension</param>
+            <param name="d4">fourth dimension</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.ones(System.Int32[])">
+            <summary>
+            Creates a `Tensor` with all elements set to 1.
+            </summary>
+            <param name="shape">An array of integers defining the output tensor shape.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.zeros(System.Int32[])">
+            <summary>
+            Creates a `Tensor` with all elements set to 0.
+            </summary>
+            <param name="shape">An array of integers defining the output tensor shape. Can
+             be 'float32', 'int32' or 'bool'. Defaults to 'float'.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.fill(System.Int32[],System.Single)">
+            <summary>
+            Creates a `Tensor` filled with a scalar value.
+            </summary>
+            <param name="shape">An array of integers defining the output tensor shape.</param>
+            <param name="value">The scalar value to fill the tensor with.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.onesLike(AlbiruniML.Tensor)">
+            <summary>
+             Creates a `Tensor` with all elements set to 1 with the same shape as the
+             given tensor.
+            </summary>
+            <param name="x"> A tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.zerosLike(AlbiruniML.Tensor)">
+            <summary>
+             Creates a `Tensor` with all elements set to 0 with the same shape as the
+             given tensor.
+            </summary>
+            <param name="x"> A tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.eye(System.Int32,System.Nullable{System.Int32},System.Int32[])">
+            <summary>
+            Create an identity matrix.
+            </summary>
+            <param name="numRows">Number of rows.</param>
+            <param name="numColumns"> Number of columns. Defaults to `numRows`.</param>
+            <param name="batchShape"> If provided, will add the batch shape to the beginning
+              of the shape of the returned `Tensor` by repeating the identity
+              matrix.</param>
+            <returns>Identity matrix of the specified size and data type, possibly
+            with batch repetition if `batchShape` is specified.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.clone(AlbiruniML.Tensor)">
+            <summary>
+             Creates a new tensor with the same values and shape as the specified
+             tensor.
+            </summary>
+            <param name="x">The tensor to clone.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.randomNormal(System.Int32[],System.Double,System.Double,System.Nullable{System.Double})">
+            <summary>
+             Creates a `Tensor` with values sampled from a normal distribution.
+            </summary>
+            <example>
+            <code>
+             alb.randomNormal(alb.data(2, 2)).print(); 
+            </code>
+            </example>
+            <param name="shape"> An array of integers defining the output tensor shape.</param>
+            <param name="mean">The mean of the normal distribution.</param>
+            <param name="stdDev">The standard deviation of the normal distribution.</param>
+            <param name="seed">The seed for the random number generator.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.truncatedNormal(System.Int32[],System.Double,System.Double,System.Nullable{System.Double})">
+             <summary>
+              Creates a `Tensor` with values sampled from a truncated normal
+              distribution.
+              The generated values follow a normal distribution with specified mean and
+            standard deviation, except that values whose magnitude is more than 2
+            standard deviations from the mean are dropped and re-picked.
+             </summary>
+             <example>
+             <code>
+              alb.truncatedNormal(alb.data(2, 2)).print(); 
+             </code>
+             </example>
+             <param name="shape">An array of integers defining the output tensor shape.</param>
+             <param name="mean">The mean of the normal distribution.</param>
+             <param name="stdDev">The standard deviation of the normal distribution.</param>
+             <param name="seed">The seed for the random number generator.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.randomUniform(System.Int32[],System.Double,System.Double)">
+            <summary>
+            Creates a `Tensor` with values sampled from a uniform distribution.
+            The generated values follow a uniform distribution in the range [minval,
+             maxval). The lower bound minval is included in the range, while the upper
+              bound maxval is excluded.
+            </summary>
+            <example>
+            <code>
+             alb.randomUniform(alb.data(2, 2)).print(); 
+            </code>
+            </example>
+            <param name="shape">An array of integers defining the output tensor shape.</param>
+            <param name="minval">The lower bound on the range of random values to generate.
+            Defaults to 0.</param>
+            <param name="maxval">The upper bound on the range of random values to generate.
+             Defaults to 1.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.rand(System.Int32[],System.Func{System.Double})">
+            <summary>
+            Creates a `Tensor` with values sampled from a random number generator
+            function defined by the user.
+            </summary>
+            <param name="shape">An array of integers defining the output tensor shape.</param>
+            <param name="randFunction">A random number generator function which is called for
+            each element in the output tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.multinomial(AlbiruniML.Tensor,System.Boolean,System.Int32,System.Nullable{System.Double})">
+            <summary>
+            Creates a `Tensor` with values drawn from a multinomial distribution.
+            </summary>
+            <example>
+            <code>
+             var probs = alb.tensor(alb.data(.75f, .25f));
+             alb.multinomial(probs, 3).print();
+            </code>
+            </example>
+            <param name="logits">1D array with unnormalized log-probabilities, or
+            2D array of shape `[batchSize, numOutcomes]`. See the `normalized`
+             parameter.</param>
+            <param name="normalized"> Whether the provided `logits` are normalized true
+             probabilities (sum to 1).</param>
+            <param name="numSamples">Number of samples to draw for each row slice.</param>
+            <param name="seed">The seed number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.oneHot(AlbiruniML.Tensor,System.Int32,System.Single,System.Single)">
+            <summary>
+            Creates a one-hot `Tensor`. The locations represented by `indices` take
+            value `onValue` (defaults to 1), while all other locations take value
+             `offValue` (defaults to 0).
+            </summary>
+            <param name="indices">`Tensor1D` of indices.</param>
+            <param name="depth">The depth of the one hot dimension.</param>
+            <param name="onValue">A number used to fill in output when the index matches
+            the location.</param>
+            <param name="offValue">A number used to fill in the output when the index does
+            not match the location.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.reshape(AlbiruniML.Tensor,System.Int32[])">
+             <summary>
+             Reshapes a `Tensor` to a given shape.
+             Given a input tensor, returns a new tensor with the same values as the
+             input tensor with shape `shape`.
+             If one component of shape is the special value -1, the size of that
+             dimension is computed so that the total size remains constant. In
+             particular, a shape of [-1] flattens into 1-D. At most one component of
+             shape can be -1.
+            
+             If shape is 1-D or higher, then the operation returns a tensor with shape
+             shape filled with the values of tensor. In this case, the number of
+             elements implied by shape must be the same as the number of elements in
+             tensor.
+             </summary>
+             <param name="x">The input tensor to be reshaped.</param>
+             <param name="shape">An array of integers defining the output tensor shape.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.squeeze(AlbiruniML.Tensor,System.Int32[])">
+            <summary>
+            Removes dimensions of size 1 from the shape of a `Tensor`.
+            </summary>
+            <param name="x">The input tensor to be squeezed.</param>
+            <param name="axis">
+            An optional list of numbers. If specified, only
+            squeezes the dimensions listed. The dimension index starts at 0. It is
+            an error to squeeze a dimension that is not 1.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.tile(AlbiruniML.Tensor,System.Int32[])">
+             <summary>
+            Construct an tensor by repeating it the number of times given by reps. 
+            This operation creates a new tensor by replicating `input` `reps`
+            times. The output tensor's i'th dimension has `input.shape[i] *
+            reps[i]` elements, and the values of `input` are replicated
+            `reps[i]` times along the i'th dimension. For example, tiling
+            `[a, b, c, d]` by `[2]` produces `[a, b, c, d, a, b, c, d]`.
+             </summary>
+             <param name="x">The tensor to tile.</param>
+             <param name="reps">Determines the number of replications per dimension.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.unsortedSegmentSum(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32)">
+            <summary>
+            Computes the sum along segments of a `Tensor`.
+            </summary>
+            <param name="x">The `Tensor` that will be summed along its segments</param>
+            <param name="segmentIds">A `Tensor1D` whose rank is equal to the rank of `x`'s 
+            dimension along the `axis`.  Maps each element of `x` to a segment.</param>
+            <param name="numSegments">The number of distinct `segmentIds`</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.gather(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32)">
+            <summary>
+            Gather slices from tensor `x`'s axis `axis` according to `indices`.
+            </summary>
+            <param name="x">The input tensor whose slices to be gathered.</param>
+            <param name="indices">The indices of the values to extract.</param>
+            <param name="axis">The axis over which to select values. Defaults to 0.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.pad1d(AlbiruniML.Tensor,System.Int32[][],System.Single)">
+            <summary>
+            Pads a `Tensor1D` with a given value and paddings. See `pad` for details.
+            </summary>
+        </member>
+        <member name="M:AlbiruniML.Ops.pad2d(AlbiruniML.Tensor,System.Int32[][],System.Single)">
+            <summary>
+            Pads a `Tensor2D` with a given value and paddings. See `pad` for details.
+            </summary> 
+        </member>
+        <member name="M:AlbiruniML.Ops.pad3d(AlbiruniML.Tensor,System.Int32[][],System.Single)">
+            <summary>
+            Pads a `Tensor3D` with a given value and paddings. See `pad` for details.
+            </summary> 
+        </member>
+        <member name="M:AlbiruniML.Ops.pad4d(AlbiruniML.Tensor,System.Int32[][],System.Single)">
+            <summary>
+            Pads a `Tensor4D` with a given value and paddings. See `pad` for details.
+            </summary> 
+        </member>
+        <member name="M:AlbiruniML.Ops.pad(AlbiruniML.Tensor,System.Int32[][],System.Single)">
+             <summary>
+             Pads a `Tensor` with a given value and paddings.
+             This operation currently only implements the `CONSTANT` mode.
+             </summary>
+             <param name="x">The tensor to pad.</param>
+             <param name="paddings">
+              An array of length `R` (the rank of the tensor), where each
+            element is a length-2 tuple of ints `[padBefore, padAfter]`, specifying
+            how much to pad along each dimension of the tensor.
+             </param>
+             <param name="constantValue">The pad value to use. Defaults to 0.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.unstack(AlbiruniML.Tensor,System.Int32)">
+            <summary>
+            Unstacks a `Tensor` of rank-`R` into a list of rank-`(R-1)` `Tensor`s.
+            </summary>
+            <param name="x">A tensor object.</param>
+            <param name="axis">The axis to unstack along. Defaults to 0 (the first dim).</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.stack(AlbiruniML.Tensor[],System.Int32)">
+            <summary>
+            Stacks a list of rank-`R` `Tensor`s into one rank-`(R+1)` `Tensor`.
+            </summary>
+            <param name="tensors"> A list of tensor objects with the same shape.</param>
+            <param name="axis">The axis to stack along. Defaults to 0 (the first dim).</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.split(AlbiruniML.Tensor,System.Int32[],System.Int32)">
+             <summary>
+            Splits a `Tensor` into sub tensors.
+            
+             If `numOrSizeSplits` is a number, splits `x` along dimension `axis`
+             into `numOrSizeSplits` smaller tensors.
+             Requires that `numOrSizeSplits` evenly divides `x.shape[axis]`.
+            
+             If `numOrSizeSplits` is a number array, splits `x` into
+             `(numOrSizeSplits.length` pieces. The shape of the `i`-th piece has the
+             same size as `x` except along dimension `axis` where the size is
+             `numOrSizeSplits[i]`.
+             </summary>
+             <param name="x">The input tensor to split.</param>
+             <param name="numOrSizeSplits">
+             Either an integer indicating the number of
+             splits along the axis or an array of integers containing the sizes of each
+             output tensor along the axis. If a number then it must evenly divide
+             `x.shape[axis]`; otherwise the sum of sizes must match `x.shape[axis]`.
+             </param>
+             <param name="axis"> The dimension along which to split. Defaults to 0 (the first dim).</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.split(AlbiruniML.Tensor,System.Int32,System.Int32)">
+             <summary>
+            Splits a `Tensor` into sub tensors.
+            
+             If `numOrSizeSplits` is a number, splits `x` along dimension `axis`
+             into `numOrSizeSplits` smaller tensors.
+             Requires that `numOrSizeSplits` evenly divides `x.shape[axis]`.
+            
+             If `numOrSizeSplits` is a number array, splits `x` into
+             `(numOrSizeSplits.length` pieces. The shape of the `i`-th piece has the
+             same size as `x` except along dimension `axis` where the size is
+             `numOrSizeSplits[i]`.
+             </summary>
+             <param name="x">The input tensor to split.</param>
+             <param name="numOrSizeSplits">
+             Either an integer indicating the number of
+             splits along the axis or an array of integers containing the sizes of each
+             output tensor along the axis. If a number then it must evenly divide
+             `x.shape[axis]`; otherwise the sum of sizes must match `x.shape[axis]`.
+             </param>
+             <param name="axis"> The dimension along which to split. Defaults to 0 (the first dim).</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.cumsum(AlbiruniML.Tensor,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Computes the cumulative sum of a `Tensor` along `axis`.
+            </summary>
+            <param name="x">The input tensor to be summed.</param>
+            <param name="axis">The axis along which to sum. Optional. Defaults to 0.</param>
+            <param name="exclusive">Whether to perform exclusive cumulative sum. Optional.
+              Defaults to false. If set to true then the sum of each tensor entry
+              does not include its own value, but only the values previous to it
+                along the specified axis.</param>
+            <param name="reverse">Whether to sum in the opposite direction. Optional.
+              Defaults to false.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.expandDims(AlbiruniML.Tensor,System.Int32)">
+            <summary>
+            Returns a `Tensor` that has expanded rank, by inserting a dimension
+            into the tensor's shape.
+            </summary>
+            <param name="x">The input tensor whose dimensions to be expanded.</param>
+            <param name="axis">The dimension index at which to insert shape of `1`. Defaults
+            to 0 (the first dimension).</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.linspace(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Return an evenly spaced sequence of numbers over the given interval.
+            </summary>
+            <param name="start">The start value of the sequence.</param>
+            <param name="stop">The end value of the sequence.</param>
+            <param name="num">The number of values to generate.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.range(System.Int32,System.Int32,System.Int32)">
+             <summary>
+               Creates a new `Tensor1D` filled with the numbers in the range provided.
+            
+            The tensor is a is half-open interval meaning it includes start, but
+            excludes stop. Decrementing ranges and negative step values are also
+            supported.
+             </summary>
+             <param name="start">An integer start value</param>
+             <param name="stop"> An integer stop value</param>
+             <param name="step">An integer increment (will default to 1 or -1)</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.buffer(System.Int32[],System.Single[])">
+             <summary>
+            Creates an empty `TensorBuffer` with the specified `shape`. 
+            The values are stored in cpu as `TypedArray`. Fill the buffer using
+            `buffer.set()`, or by modifying directly `buffer.values`. When done,
+            call `buffer.toTensor()` to get an immutable `Tensor` with those values.
+            
+            When done, call `buffer.toTensor()` to get an immutable `Tensor` with
+            those values.
+             </summary>
+             <param name="shape"> An array of integers defining the output tensor shape.</param>
+             <param name="values">The values of the buffer</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.batchToSpaceND(AlbiruniML.Tensor,System.Int32[],System.Int32[][])">
+             <summary>
+             This operation reshapes the "batch" dimension 0 into `M + 1` dimensions of
+             shape `blockShape + [batch]`, interleaves these blocks back into the grid
+             defined by the spatial dimensions `[1, ..., M]`, to obtain a result with
+             the same rank as the input. The spatial dimensions of this intermediate
+             result are then optionally cropped according to `crops` to produce the
+             output. This is the reverse of `spaceToBatchND`. See below for a precise
+             description.
+             
+             
+             This operation is equivalent to the following steps:
+            
+            1. Reshape `x` to `reshaped` of shape: `[blockShape[0], ...,
+            blockShape[M-1], batch / prod(blockShape), x.shape[1], ...,
+            x.shape[N-1]]`
+            
+            2. Permute dimensions of `reshaped`to produce `permuted` of shape `[batch /
+            prod(blockShape),x.shape[1], blockShape[0], ..., x.shape[M],
+            blockShape[M-1],x.shape[M+1], ..., x.shape[N-1]]`
+            
+            3. Reshape `permuted` to produce `reshapedPermuted` of shape `[batch /
+            prod(blockShape),x.shape[1] * blockShape[0], ..., x.shape[M] *
+            blockShape[M-1],x.shape[M+1], ..., x.shape[N-1]]`
+            
+            4. Crop the start and end of dimensions `[1, ..., M]` of `reshapedPermuted`
+            according to `crops` to produce the output of shape: `[batch /
+            prod(blockShape),x.shape[1] * blockShape[0] - crops[0,0] - crops[0,1],
+            ..., x.shape[M] * blockShape[M-1] - crops[M-1,0] -
+            crops[M-1,1],x.shape[M+1], ..., x.shape[N-1]]`
+             </summary>
+             <param name="x">A `Tensor`. N-D with `x.shape` = `[batch] + spatialShape +
+             remainingShape`, where spatialShape has `M` dimensions.</param>
+             <param name="blockShape">A 1-D array. Must be one of the following types: `int32`,
+             `int64`. Must have shape `[M]`, all values must be >= 1.</param>
+             <param name="crops">A 2-D array.  Must be one of the following types: `int32`,
+             `int64`. Must have shape `[M, 2]`, all values must be >= 0. `crops[i] =
+             [cropStart, cropEnd]` specifies the amount to crop from input dimension `i
+             + 1`, which corresponds to spatial dimension `i`. It is required that
+             `cropStart[i] + cropEnd[i] less than or = blockShape[i] * inputShape[i + 1]`</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.batchNormalization2d(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,System.Single,AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Batch normalization, strictly for 2D. For the more relaxed version, see
+            batchNormalization".
+            </summary>
+            <param name="x">The input Tensor.</param>
+            <param name="mean">A mean Tensor.</param>
+            <param name="variance">A variance Tensor.</param>
+            <param name="varianceEpsilon">A small float number to avoid dividing by 0.</param>
+            <param name="scale">A scale Tensor.</param>
+            <param name="offset">An offset Tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.batchNormalization3d(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,System.Single,AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Batch normalization, strictly for 3D. For the more relaxed version, see
+            batchNormalization".
+            </summary>
+            <param name="x">The input Tensor.</param>
+            <param name="mean">A mean Tensor.</param>
+            <param name="variance">A variance Tensor.</param>
+            <param name="varianceEpsilon">A small float number to avoid dividing by 0.</param>
+            <param name="scale">A scale Tensor.</param>
+            <param name="offset">An offset Tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.batchNormalization4d(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,System.Single,AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Batch normalization, strictly for 4D. For the more relaxed version, see
+            batchNormalization".
+            </summary>
+            <param name="x">The input Tensor.</param>
+            <param name="mean">A mean Tensor.</param>
+            <param name="variance">A variance Tensor.</param>
+            <param name="varianceEpsilon">A small float number to avoid dividing by 0.</param>
+            <param name="scale">A scale Tensor.</param>
+            <param name="offset">An offset Tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.batchNormalization(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,System.Single,AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Batch normalization.
+            
+            As described in
+            [http://arxiv.org/abs/1502.03167](http://arxiv.org/abs/1502.03167).
+            
+            Mean, variance, scale, and offset can be of two
+            shapes:
+              - The same shape as the input.
+              - In the common case, the depth dimension is the last dimension of x, so
+                the values would be an "Tensor1D" of shape [depth].
+            </summary>
+            <param name="x">The input Tensor.</param>
+            <param name="mean">A mean Tensor.</param>
+            <param name="variance">A variance Tensor.</param>
+            <param name="varianceEpsilon">A small float number to avoid dividing by 0.</param>
+            <param name="scale">A scale Tensor.</param>
+            <param name="offset">An offset Tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.add(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Adds two `Tensor`s element-wise, A + B. Supports broadcasting.
+            
+            We also expose `addStrict` which has the same signature as this op and
+            asserts that `a` and `b` are the same shape (does not broadcast).
+            </summary>
+            <param name="a">The first `Tensor` to add.</param>
+            <param name="b">The second `Tensor` to add. Must have the same type as `a`.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.addStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Adds two `Tensor`s element-wise, A + B.
+            
+            Inputs must be the same shape. For broadcasting support, use add() instead.
+            </summary>
+            <typeparam name="Tensor">Tensor extends Tensor</typeparam>
+            <param name="a">The first Tensor to add element-wise.</param>
+            <param name="b">The second Tensor to add element-wise.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.sub(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+             <summary>
+            Subtracts two `Tensor`s element-wise, A - B. Supports broadcasting.
+            
+             We also expose `subStrict` which has the same signature as this op and
+             asserts that `a` and `b` are the same shape (does not broadcast).
+             </summary>
+             <param name="a">The first `Tensor` to subtract from.</param>
+             <param name="b">The second `Tensor` to be subtracted. Must have the same dtype as `a`.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.subStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Subtracts two `Tensor`s element-wise, A - B. Inputs must
+            be the same shape.
+            
+            For broadcasting support, use sub() instead.
+            </summary>
+            <param name="a">The first Tensor to subtract element-wise.</param>
+            <param name="b">The second Tensor to subtract element-wise.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.pow(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Computes the power of one `Tensor` to another. Supports broadcasting.
+            
+            Given a `Tensor` x and a `Tensor` y, this operation computes x^y for
+            corresponding elements in x and y. The result's dtype will be the upcasted
+            type of the `base` and `exp` dtypes.
+            </summary>
+            <param name="baset">The base `Tensor` to pow element-wise.</param>
+            <param name="exp">The exponent `Tensor` to pow element-wise.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.powStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+             <summary>
+             Computes the power of one `Tensor` to another. Inputs must
+             be the same shape.
+            
+             For broadcasting support, use pow() instead.
+             </summary>
+             <param name="a">The base tensor to pow element-wise</param>
+             <param name="b">The exponent tensor to pow element-wise.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.mul(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Multiplies two `Tensor`s element-wise, A * B. Supports broadcasting.
+            
+            We also expose `mulStrict` which has the same signature as this op and
+            asserts that `a` and `b` are the same shape (does not broadcast).
+            </summary>
+            <param name="a">The first tensor to multiply.</param>
+            <param name="b">The second tensor to multiply.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.mulStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Multiplies two `Tensor`s element-wise, A * B.
+            Inputs must be the same shape. For broadcasting support, use mul().
+            </summary>
+            <param name="a">The first tensor to multiply.</param>
+            <param name="b">The second tensor to multiply.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.div(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+             <summary>
+             Divides two `Tensor`s element-wise, A / B. Supports broadcasting.
+            
+             We also expose `divStrict` which has the same signature as this op and
+             asserts that `a` and `b` are the same shape (does not broadcast).
+             </summary>
+             <param name="a">The first tensor as the numerator.</param>
+             <param name="b">The second tensor as the denominator.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.divStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+             Divides two `Tensor`s element-wise, A / B. Inputs must
+             be the same shape.
+            </summary>
+            <param name="a">The first tensor as the numerator for element-wise division.</param>
+            <param name="b">The second tensor as the denominator for element-wise division.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.mod(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Returns the mod of a and b element-wise.
+            `floor(x / y) * y + mod(x, y) = x`
+            Supports broadcasting. 
+            We also expose `modStrict` which has the same signature as this op and
+            asserts that `a` and `b` are the same shape (does not broadcast).
+            </summary>
+            <param name="a">The first tensor.</param>
+            <param name="b">The second tensor. Must have the same type as `a`.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.modStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Returns the mod of a and b (a less than b ? a : b) element-wise. Inputs must
+            be the same shape. For broadcasting support, use mod().
+            </summary>
+            <param name="a">The first tensor.</param>
+            <param name="b">The second tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.minimum(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+             <summary>
+             Returns the min of a and b (`a less than b ? a : b`) element-wise.
+             Supports broadcasting.
+            
+             We also expose `minimumStrict` which has the same signature as this op and
+             asserts that `a` and `b` are the same shape (does not broadcast).
+             </summary>
+             <param name="a">The first tensor.</param>
+             <param name="b">The second tensor.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.minimumStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Returns the min of a and b (`a les than b ? a : b`) element-wise. Inputs must
+            be the same shape. For broadcasting support, use minimum().
+            </summary>
+            <param name="a">The first tensor.</param>
+            <param name="b">The second tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.maximum(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+             <summary>
+             Returns the max of a and b (`a > b ? a : b`) element-wise.
+             Supports broadcasting.
+            
+             We also expose `maximumStrict` which has the same signature as this op and
+             asserts that `a` and `b` are the same shape (does not broadcast).
+             </summary>
+             <param name="a">The first tensor.</param>
+             <param name="b">The second tensor.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.maximumStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Returns the max of a and b (`a > b ? a : b`) element-wise. Inputs must
+            be the same shape. For broadcasting support, use maximum().
+            </summary>
+            <param name="a">The first tensor.</param>
+            <param name="b">The second tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.squaredDifference(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Returns (a - b) * (a - b) element-wise.
+            Supports broadcasting.
+            
+            We also expose `squaredDifferenceStrict` which has the same signature as
+            this op and asserts that `a` and `b` are the same shape (does not
+            broadcast).
+            </summary>
+            <param name="a">The first tensor.</param>
+            <param name="b">The second tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.squaredDifferenceStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Returns (a - b) * (a - b) element-wise.
+            
+            Inputs must be the same shape. For broadcasting support, use
+            squaredDifference() instead
+            </summary>
+            <param name="a">The first tensor.</param>
+            <param name="b">The second tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.atan2(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+               * Computes arctangent of `Tensor`s a / b element-wise: `atan2(a, b)`.
+            Supports broadcasting.
+            </summary>
+            <param name="a">The first tensor.</param>
+            <param name="b">The second tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.variable(AlbiruniML.Tensor,System.Boolean,System.String)">
+            <summary>
+            Creates a new variable with the provided initial value.
+            </summary>
+            <param name="initialValue">Initial value for the tensor.</param>
+            <param name="trainable">If true, optimizers are allowed to update it.</param>
+            <param name="name">Name of the variable. Defaults to a unique id.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.notEqual(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Returns the truth value of (a != b) element-wise. Supports broadcasting.
+            
+            We also expose `notEqualStrict` which has the same signature as this op and
+            asserts that `a` and `b` are the same shape (does not broadcast).
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.notEqualStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Strict version of `notEqual` that forces `a` and `b` to be of the same
+            shape.
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.less(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Returns the truth value of (a less than b) element-wise. Supports broadcasting.
+            
+            We also expose `lessStrict` which has the same signature as this op and
+            asserts that `a` and `b` are the same shape (does not broadcast).
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.lessStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Strict version of `less` that forces `a` and `b` to be of the same shape.
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.equal(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+             Returns the truth value of (a == b) element-wise. Supports broadcasting.
+            
+            We also expose `equalStrict` which has the same signature as this op
+            and asserts that `a` and `b` are the same shape (does not broadcast).
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.equalStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Strict version of `equal` that forces `a` and `b` to be of the same shape.
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.lessEqual(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Returns the truth value of (a less than = b) element-wise. Supports broadcasting.
+            
+            We also expose `lessEqualStrict` which has the same signature as this op
+            and asserts that `a` and `b` are the same shape (does not broadcast).
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.lessEqualStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Strict version of `lessEqual` that forces `a` and `b` to be of the same shape.
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.greater(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+             <summary>
+             Returns the truth value of (a > b) element-wise. Supports broadcasting.
+            
+             We also expose `greaterStrict` which has the same signature as this
+             op and asserts that `a` and `b` are the same shape (does not broadcast).
+             </summary>
+             <param name="a">The first input tensor.</param>
+             <param name="b">The second input tensor.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.greaterStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Strict version of `greater` that forces `a` and `b` to be of the same shape.
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>       /// <summary>
+            Strict version of `greater` that forces `a` and `b` to be of the same shape.
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.greaterEqual(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Returns the truth value of (a >= b) element-wise. Supports broadcasting.
+            
+            We also expose `greaterEqualStrict` which has the same signature as this
+            op and asserts that `a` and `b` are the same shape (does not broadcast).
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.greaterEqualStrict(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Strict version of `greaterEqual` that forces `a` and `b` to be of the same shape.
+            </summary>
+            <param name="a">The first input tensor.</param>
+            <param name="b">The second input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.concat(AlbiruniML.Tensor[],System.Int32)">
+             <summary>
+             Concatenates a list of `Tensor`s along a given axis.
+            
+             The tensors ranks and types must match, and their sizes must match in all
+             dimensions except `axis`.
+             </summary>
+             <param name="tensors">A list of tensors to concatenate.</param>
+             <param name="axis">The axis to concate along. Defaults to 0 (the first dim).</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.concat(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32)">
+             <summary>
+             Concatenates a list of `Tensor`s along a given axis.
+            
+             The tensors ranks and types must match, and their sizes must match in all
+             dimensions except `axis`.
+             </summary>
+             <param name="tensors">A list of tensors to concatenate.</param>
+             <param name="axis">The axis to concate along. Defaults to 0 (the first dim).</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.resizeBilinear(AlbiruniML.Tensor,System.Int32[],System.Boolean)">
+            <summary>
+            Bilinear resize a batch of 3D images to a new shape.
+            </summary>
+            <param name="images">The images, of rank 4 or rank 3, of shape
+            `[batch, height, width, inChannels]`. If rank 3, batch of 1 is assumed.</param>
+            <param name="size">The new shape `[newHeight, newWidth]` to resize the
+            images to. Each channel is resized individually.</param>
+            <param name="alignCorners">Defaults to False. If true, rescale
+            input by `(new_height - 1) / (height - 1)`, which exactly aligns the 4
+              corners of images and resized images. If false, rescale by
+              `new_height / height`. Treat similarly the width dimension.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.conv1d(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32,AlbiruniML.PadType,System.Int32,AlbiruniML.roundingMode,System.Nullable{System.Int32})">
+            <summary>
+            Computes a 1D convolution over the input x.
+            </summary>
+            <param name="x">The input tensor, of Rank 3 or Rank 2, of shape
+            "[batch, width, inChannels]". If Rank 2, batch of 1 is assumed.</param>
+            <param name="filter">The filter, Rank 3, of shape
+               "[filterWidth, inDepth, outDepth]".</param>
+            <param name="stride">The number of entries by which the filter is moved right at
+               each step.</param>
+            <param name="pad">The type of padding algorithm.
+              - "same" and stride 1: output will be of same size as input,
+                 regardless of filter size.
+              - "valid": output will be smaller than input if filter is larger
+                 than 1x1.
+             - For more info, see this guide:
+               [https://www.tensorflow.org/api_guides/python/nn#Convolution](
+                    https://www.tensorflow.org/api_guides/python/nn#Convolution)
+            </param>
+            <param name="dilation">The dilation rate in which we sample input values in
+                atrous convolution. Defaults to "1". If it is greater than 1, then
+                stride must be "1".</param>
+            <param name="dimRoundingMode">The rounding mode used when computing output
+               dimensions if pad is a number. If none is provided, it will not round
+               and error if the output is of fractional size.</param>
+            <param name="padvalue">the value of pad if pad is number</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.conv2d(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32[],AlbiruniML.PadType,System.Int32[],AlbiruniML.roundingMode,System.Nullable{System.Int32})">
+            <summary>
+            Computes a 2D convolution over the input x.
+            </summary>
+            <param name="x">The input tensor, of Rank 4 or Rank 3, of shape
+              "[batch, height, width, inChannels]". If Rank 3, batch of 1 is</param>
+            <param name="filter">The filter, Rank 4, of shape
+             "[filterHeight, filterWidth, inDepth, outDepth]".</param>
+            <param name="strides">The strides of the convolution: "[strideHeight,
+            strideWidth]".</param>
+            <param name="pad">The type of padding algorithm.
+              - "same" and stride 1: output will be of same size as input,
+                 regardless of filter size.
+              - "valid": output will be smaller than input if filter is larger
+                 than 1x1.
+             - For more info, see this guide:
+               [https://www.tensorflow.org/api_guides/python/nn#Convolution](
+                    https://www.tensorflow.org/api_guides/python/nn#Convolution)</param>
+            <param name="dilations">The dilation rates: "[dilationHeight, dilationWidth]"
+                in which we sample input values across the height and width dimensions
+                in atrous convolution. Defaults to "[1, 1]". If "dilations" is a single
+                number, then "dilationHeight == dilationWidth". If it is greater than
+                1, then all values of "strides" must be 1.</param>
+            <param name="dimRoundingMode">The rounding mode used when computing output
+                dimensions if pad is a number. If none is provided, it will not round
+                and error if the output is of fractional size.</param> 
+            <param name="padvalue">the value of pad if pad is number</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.conv2dDerFilter(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32[],System.Int32[],AlbiruniML.PadType,AlbiruniML.roundingMode,System.Nullable{System.Int32})">
+            <summary>
+            Computes the derivative of the filter of a 2D convolution.
+            </summary>
+            <param name="x">The input tensor, of Rank 4 or Rank 3 of shape
+             [batch, height, width, inChannels]. If Rank 3, batch of 1 is assumed.</param>
+            <param name="dy">The dy image, of Rank 4 or Rank 3, of shape
+             [batch, height, width, outDepth]. If Rank 3, batch of 1 is assumed.</param>
+            <param name="filterShape">The shape of the filter, length 4,
+              [filterHeight, filterWidth, inDepth, outDepth].</param>
+            <param name="strides">The strides of the convolution: [strideHeight,
+            strideWidth].</param>
+            <param name="pad">A string from: 'same', 'valid'. The type of padding algorithm
+            used in the forward prop of the op.</param>
+            <param name="dimRoundingMode">A string from: 'ceil', 'round', 'floor'. The
+               rounding mode used when computing output dimensions if pad is a
+               number. If none is provided, it will not round and error if the output
+               is of fractional size.</param>
+            <param name="padValue">the value of pad if pad is number</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.conv2dDerInput(System.Int32[],AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32[],AlbiruniML.PadType,AlbiruniML.roundingMode,System.Nullable{System.Int32})">
+             <summary>
+             Computes the derivative of the input of a 2D convolution.
+             </summary>
+             <param name="xShape">The shape of the input: [batch, height, width, inDepth].
+            If length of 3, batch of 1 is assumed.</param>
+             <param name="dy">The derivative of the output, of Rank 4 or Rank 3 of shape
+               "[batch, outHeight, outWidth, outDepth]". If Rank 3, batch of 1 is
+             assumed.</param>
+             <param name="filter">The filter, Rank 4, of shape
+             "[filterHeight, filterWidth, inDepth, outDepth]".</param>
+             <param name="strides">The strides of the convolution: "[strideHeight,
+             strideWidth]".</param>
+             <param name="pad">The type of padding algorithm used:
+               - "same" and stride 1: output will be of same size as input,
+                  regardless of filter size.
+               - "valid": output will be smaller than input if filter is larger
+                  than 1x1.</param>
+             <param name="dimRoundingMode">he rounding mode used when computing output
+               dimensions if pad is a number. If none is provided, it will not round
+               and error if the output is of fractional size.</param>
+             <param name="padValue"></param>
+             <returns>the value of pad if pad is number</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.conv2dTranspose(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32[],System.Int32[],AlbiruniML.PadType,AlbiruniML.roundingMode,System.Nullable{System.Int32})">
+            <summary>
+            Computes the transposed 2D convolution of an image, also known as a
+            deconvolution.
+            </summary>
+            <param name="x">The input image, of Rank 4 or Rank 3, of shape
+             "[batch, height, width, inDepth]". If Rank 3, batch of 1 is assumed.</param>
+            <param name="filter">The filter, Rank 4, of shape
+             "[filterHeight, filterWidth, outDepth, inDepth]".
+              "inDepth" must match "inDepth" in "x".</param>
+            <param name="outputShape">outputShape Output shape, of Rank 4 or Rank 3:
+                "[batch, height, width, outDepth]". If Rank 3, batch of 1 is assumed.</param>
+            <param name="strides">The strides of the original convolution:
+                "[strideHeight, strideWidth]".</param>
+            <param name="pad">The type of padding algorithm used in the non-transpose version
+              of the op.</param>
+            <param name="dimRoundingMode">The rounding mode used when computing output
+               dimensions if pad is a number. If none is provided, it will not round
+               and error if the output is of fractional size.</param>
+            <param name="padvalue">the value of pad if pad is number</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.depthwiseConv2d(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32[],AlbiruniML.PadType,System.Int32[],AlbiruniML.roundingMode,System.Nullable{System.Int32})">
+             <summary>
+             Depthwise 2D convolution.
+                * Given a 4D "input" array and a "filter" array of shape
+             "[filterHeight, filterWidth, inChannels, channelMultiplier]" containing
+             "inChannels" convolutional filters of depth 1, this op applies a
+             different filter to each input channel (expanding from 1 channel to
+             "channelMultiplier" channels for each), then concatenates the results
+             together. The output has "inChannels * channelMultiplier" channels.
+            
+             See
+             [https://www.tensorflow.org/api_docs/python/tf/nn/depthwise_conv2d](
+                 https://www.tensorflow.org/api_docs/python/tf/nn/depthwise_conv2d)
+             for more details.
+             </summary>
+             <param name="input">The input tensor, of Rank 4 or Rank 3, of shape
+                "[batch, height, width, inChannels]". If Rank 3, batch of 1 is assumed.</param>
+             <param name="filter">The filter tensor, Rank 4, of shape
+              "[filterHeight, filterWidth, inChannels, channelMultiplier]"</param>
+             <param name="strides">The strides of the convolution: "[strideHeight,
+             strideWidth]". If strides is a single number, then "strideHeight ==
+             strideWidth".</param>
+             <param name="pad">The type of padding algorithm.
+              - "same" and stride 1: output will be of same size as input,
+                  regardless of filter size.
+              - "valid": output will be smaller than input if filter is larger
+                  than 1x1.
+              - For more info, see this guide:
+                [https://www.tensorflow.org/api_guides/python/nn#Convolution](
+                     https://www.tensorflow.org/api_guides/python/nn#Convolution)</param>
+             <param name="dilations">The dilation rates: "[dilationHeight, dilationWidth]"
+                in which we sample input values across the height and width dimensions
+                in atrous convolution. Defaults to "[1, 1]". If "rate" is a single
+                number, then "dilationHeight == dilationWidth". If it is greater than
+                1, then all values of "strides" must be 1.</param>
+             <param name="dimRoundingMode">The rounding mode used when computing output
+                 dimensions if pad is a number. If none is provided, it will not round
+                 and error if the output is of fractional size.</param>
+             <param name="padvalue">the value of pad if pad is number</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.separableConv2d(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32[],AlbiruniML.PadType,System.Int32[],System.Nullable{System.Int32})">
+             <summary>
+             2-D convolution with separable filters.
+            
+             Performs a depthwise convolution that acts separately on channels followed
+             by a pointwise convolution that mixes channels. Note that this is
+             separability between dimensions [1, 2] and 3, not spatial separability
+             between dimensions 1 and 2.
+            
+             See
+             [https://www.tensorflow.org/api_docs/python/tf/nn/separable_conv2d](
+                 https://www.tensorflow.org/api_docs/python/tf/nn/separable_conv2d)
+             for more details.
+             </summary>
+             <param name="x">The input tensor, of rank 4 or rank 3, of shape
+                 `[batch, height, width, inChannels]`. If rank 3, batch of 1 is
+             assumed.</param>
+             <param name="depthwiseFilter">The depthwise filter tensor, rank 4, of shape
+                 `[filterHeight, filterWidth, inChannels, channelMultiplier]`. This is
+                 the filter used in the first step.</param>
+             <param name="pointwiseFilter">The pointwise filter tensor, rank 4, of shape
+                 `[1, 1, inChannels * channelMultiplier, outChannels]`. This is
+                 the filter used in the second step.</param>
+             <param name="strides">The strides of the convolution: `[strideHeight,
+             strideWidth]`. If strides is a single number, then `strideHeight ==
+             strideWidth`.</param>
+             <param name="pad"> The type of padding algorithm.
+              - `same` and stride 1: output will be of same size as input,
+                  regardless of filter size.
+              - `valid`: output will be smaller than input if filter is larger
+                  than 1x1.
+              - For more info, see this guide:
+                [https://www.tensorflow.org/api_guides/python/nn#Convolution](
+                     https://www.tensorflow.org/api_guides/python/nn#Convolution)</param>
+             <param name="dilation">The dilation rates: `[dilationHeight, dilationWidth]`
+                 in which we sample input values across the height and width dimensions
+                 in atrous convolution. Defaults to `[1, 1]`. If `rate` is a single
+                 number, then `dilationHeight == dilationWidth`. If it is greater than
+                 1, then all values of `strides` must be 1.</param>
+             <param name="padvalue">the value of pad if pad is number</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.repeat(AlbiruniML.Tensor,System.Int32)">
+            <summary>
+            Repeats a 2D tensor.
+            If `x` has shape `[samples, dim]` and `n` is 2, for example, the output
+            will have shape `[samples, 2, dim]`.
+            </summary>
+            <param name="x">Input tensor.</param>
+            <param name="n">Integer, number of times to repeat.</param>
+            <returns>The result of the repeat operation.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.batchFlatten(AlbiruniML.Tensor)">
+            <summary>
+            Turn a nD tensor into a 2D tensor with same 0th dimension.
+            In other words, it flattens each data samples of a batch
+            </summary>
+            <param name="x">The tensor to flatten. The Rank of this tensor is required to be 2 or higher.</param>
+            <returns>The result of the flattening.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.sliceAlongFirstAxis(AlbiruniML.Tensor,System.Int32,System.Int32)">
+            <summary>
+             Do slicing along the first axis.
+            </summary>
+            <param name="array">input `Tensor`.</param>
+            <param name="start">starting index, inclusive.</param>
+            <param name="size">size of the slice along the first axis.</param>
+            <returns>result of the slicing.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.sliceAlongLastAxis(AlbiruniML.Tensor,System.Int32,System.Int32)">
+            <summary>
+             Do slicing along the last axis.
+            </summary>
+            <param name="array">input `Tensor`.</param>
+            <param name="start">starting index, inclusive.</param>
+            <param name="size">size of the slice along the last axis.</param>
+            <returns>result of the slicing.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.sliceAlongLastAxis(AlbiruniML.Tensor,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Do slicing along the sepcified axis.
+            </summary>
+            <param name="array">input `Tensor`.</param>
+            <param name="start">starting index, inclusive.</param>
+            <param name="size">of the slice along the chosen axis.</param>
+            <param name="axis">choose an axis</param>
+            <returns>result of the slicing.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.concatenate(AlbiruniML.Tensor[],System.Int32)">
+            <summary>
+             Concatenates a list of tensors alongside the specified axis.
+            </summary>
+            <param name="tensors">`Array` of tensors to concatenate.</param>
+            <param name="axis"> Concatenation axis.</param>
+            <returns>The result of the concatenation.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.concatAlongFirstAxis(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Concatenate two arrays along the first dimension.
+            </summary>
+            <param name="a">The 1st `Tensor` to concatenate.</param>
+            <param name="b">The 2nd `Tensor` to concatenate.</param>
+            <returns>Result of the concatenation.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.biasAdd(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.ConvDataFormat)">
+            <summary>
+            Add a bias to a tensor.
+            </summary>
+            <param name="x">The tensor to add the bias to.</param>
+            <param name="bias">The bias to add to `x`. Must be 1D or the same rank as `x`.</param>
+            <param name="dataFormat"></param>
+            <returns> Result of the bias adding.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.softsign(AlbiruniML.Tensor)">
+            <summary>
+            Softsign of a tensor.
+            Defined as x / (abs(x) + 1), element-wise.
+            </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.dropout(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32[],System.Nullable{System.Int32})">
+            <summary>
+            Sets entries in `x` to zero at random, while scaling the entire tensor.
+            </summary>
+            <param name="x">input tensor.</param>
+            <param name="level">fraction of the entries in the tensor that will be set to 0.</param>
+            <param name="noiseShape">shape of randomly generated keep/drop flags, must be broadcastable to the shape of `x`.</param>
+            <param name="seed">random seed to ensure determinism.</param>
+            <returns>Result of the dropout operation.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.hardSigmoid(AlbiruniML.Tensor)">
+            <summary>
+            Element-wise, segment-wise linear approximation of sigmoid.
+             Returns `0.` if `x less than -2.5`, `1.` if `x > 2.5`.
+             In `-2.5 less than = x less than = 2.5`, returns `0.2 * x + 0.5`.
+            </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.gramSchmidt(AlbiruniML.Tensor)">
+            <summary>
+            Gram-Schmidt orthogonalization.
+            </summary>
+            <param name="xs">The vectors to be orthogonalized, in one of the two following
+            formats:
+            - An Array of `Tensor1D`.
+            - A `Tensor2D`, i.e., a matrix, in which case the vectors are the rows
+              of `xs`.
+            In each case, all the vectors must have the same length and the length
+            must be greater than or equal to the number of vectors.</param>
+            <returns> The orthogonalized and normalized vectors or matrix.
+             Orthogonalization means that the vectors or the rows of the matrix
+             are orthogonal (zero inner products). Normalization means that each
+             vector or each row of the matrix has an L2 norm that equals `1`.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.gramSchmidt(AlbiruniML.Tensor[])">
+            <summary>
+            Gram-Schmidt orthogonalization.
+            </summary>
+            <param name="xs">The vectors to be orthogonalized, in one of the two following
+            formats:
+            - An Array of `Tensor1D`.
+            - A `Tensor2D`, i.e., a matrix, in which case the vectors are the rows
+              of `xs`.
+            In each case, all the vectors must have the same length and the length
+            must be greater than or equal to the number of vectors.</param>
+            <returns> The orthogonalized and normalized vectors or matrix.
+             Orthogonalization means that the vectors or the rows of the matrix
+             are orthogonal (zero inner products). Normalization means that each
+             vector or each row of the matrix has an L2 norm that equals `1`.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.localResponseNormalization(AlbiruniML.Tensor,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Normalizes the activation of a local neighborhood across or within
+            channels.
+            </summary>
+            <param name="x">The input tensor. The 4-D input tensor is treated as a 3-D array
+               of 1D vectors (along the last dimension), and each vector is
+               normalized independently.</param>
+            <param name="depthRadius">The number of adjacent channels or spatial locations of the
+               1D normalization window. In Tensorflow this param is called
+               'depth_radius' because only 'acrossChannels' mode is supported.</param>
+            <param name="bias">A constant bias term for the basis.</param>
+            <param name="alpha">A scale factor, usually positive.</param>
+            <param name="beta">An exponent.</param> 
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.matMul(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Boolean,System.Boolean)">
+            <summary>
+            Computes the dot product of two matrices, A * B. These must be matrices.
+            </summary>
+            <param name="a">First matrix in dot product operation.</param>
+            <param name="b">Second matrix in dot product operation.</param>
+            <param name="transposeA">If true, "a" is transposed before multiplication.</param>
+            <param name="transposeB">If true, "b" is transposed before multiplication.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.vectorTimesMatrix(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+             Computes the dot product of a vector and a matrix, v * B.
+            </summary>
+            <param name="v">The vector in dot product operation.</param>
+            <param name="matrix">The matrix in dot product operation.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.matrixTimesVector(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Computes the dot product of a matrix and vector, A * v.
+            </summary>
+            <param name="matrix">The matrix in dot product operation.</param>
+            <param name="v">The vector in dot product operation.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.dotProduct(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+             Computes the dot product of two vectors, v1 * v2.
+            </summary>
+            <param name="v1">The first vector in the dot product operation.</param>
+            <param name="v2">The second vector in the dot product operation.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.outerProduct(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Computes the outer product of two vectors, v1 and v2.
+            </summary>
+            <param name="v1">The first vector in the outer product operation.</param>
+            <param name="v2">The second vector in the dot product operation.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.dot(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Computes the dot product of two matrices and/or vectors, t1 and t2.
+            </summary>
+            <param name="t1">The first tensor in the dot operation.</param>
+            <param name="t2">The second tensor in the dot operation.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.movingAverage(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,System.Boolean)">
+             <summary>
+            Compute the moving average of a variable.
+            
+             Without zeroDebias, the moving average operation is defined by:
+               `v += delta`
+             where
+               `delta = (1 - decay) * (x - v)`
+            
+             With zeroDebias (default), the `delta` term is scaled to debias the
+             effect of the (assumed) zero-initialization of `v`.
+               `delta /= (1 - decay ^ step)`
+            
+             For more details on the zero-debiasing algorithm, see:
+               https://arxiv.org/abs/1412.6980
+            
+             Note that this function is completely stateless and does not keep track of
+             step count. The step count needs to be maintained by the caller and passed
+             in as `step`.
+             </summary>
+             <param name="v">The current moving average value.</param>
+             <param name="x">New input value, must have the same shape and dtype as `v`.</param>
+             <param name="decay">The decay factor. Typical values are 0.95 and 0.99.</param>
+             <param name="step">Step count.</param>
+             <param name="zeroDebias">Whether zeroDebias is to be performed (default: `true`).</param>
+             <returns>The new moving average value.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.norm(AlbiruniML.Tensor,AlbiruniML.NormType,System.Int32[],System.Boolean)">
+             <summary>
+             Computes the norm of scalar, vectors, and matrices.
+            This function can compute several different vector norms (the 1-norm, the
+            Euclidean or 2-norm, the inf-norm, and in general the p-norm for p > 0)
+            and matrix norms (Frobenius, 1-norm, and inf-norm).
+             </summary>
+             <param name="x">The input array.</param>
+             <param name="ord">Optional. Order of the norm. Supported norm types are
+             following:
+            
+              | ord          | norm for matrices         | norm for vectors
+              |--------------|---------------------------|---------------------
+              |euclidean     |euclidean norm             |2-norm
+              |fro           |Frobenius norm	            |
+              |Inf           |max(sum(abs(x), axis=1))   |max(abs(x))
+              |NegativeInf   |min(sum(abs(x), axis=1))   |min(abs(x))
+              |One           |max(sum(abs(x), axis=0))   |sum(abs(x))
+              |Two           |                           |sum(abs(x)^2)^1/2*</param>
+             <param name="axis">Optional. If axis is null (the default), the input is
+             considered a vector and a single vector norm is computed over the entire
+             set of values in the Tensor, i.e. norm(x, ord) is equivalent
+             to norm(x.reshape([-1]), ord). If axis is a integer, the input
+             is considered a batch of vectors, and axis determines the axis in x
+             over which to compute vector norms. If axis is a 2-tuple of integer it is
+             considered a batch of matrices and axis determines the axes in NDArray
+             over which to compute a matrix norm.</param>
+             <param name="keepDims"> Optional. If true, the norm have the same dimensionality
+             as the input.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.maxPool(AlbiruniML.Tensor,System.Int32[],System.Int32[],AlbiruniML.PadType,AlbiruniML.roundingMode,System.Nullable{System.Int32})">
+            <summary>
+            Computes the 2D max pooling of an image.
+            </summary>
+            <param name="x">The input tensor, of rank 4 or rank 3 of shape
+               `[batch, height, width, inChannels]`. If rank 3, batch of 1 is assumed</param>
+            <param name="filterSize">The filter size, a tuple `[filterHeight, filterWidth]`.</param>
+            <param name="strides">The strides of the pooling: `[strideHeight, strideWidth]`.</param>
+            <param name="pad"> The type of padding algorithm.     
+            - `same` and stride 1: output will be of same size as input,
+               regardless of filter size.
+            - `valid`: output will be smaller than input if filter is larger
+               than 1x1.
+            - For more info, see this guide:
+             [https://www.tensorflow.org/api_guides/python/nn#Convolution](
+                  https://www.tensorflow.org/api_guides/python/nn#Convolution)</param>
+            <param name="dimRoundingMode">The rounding mode used when computing output
+             dimensions if pad is a number. If none is provided, it will not round
+             and error if the output is of fractional size.</param>
+            <param name="padvalue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.maxPoolBackprop(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32[],System.Int32[],AlbiruniML.PadType,AlbiruniML.roundingMode,System.Nullable{System.Int32})">
+            <summary>
+            Computes the backprop of a max pool.
+            </summary>
+            <param name="dy">The dy error, of rank 4 or rank 3 of shape
+            [batchSize, height, width, channels]. If rank 3, batch of 1 is assumed.</param>
+            <param name="input">The original input image, of rank 4, of shape
+            [batchSize, height, width, channels].</param>
+            <param name="output ">The original output image, of rank 4, of shape
+            [batchSize, outHeight, outWidth, channels].</param>
+            <param name="filterSize">The filter size, a tuple [filterHeight, filterWidth].</param>
+            <param name="strides">The strides of the pooling: [strideHeight, strideWidth].</param>
+            <param name="pad">A string from: 'same', 'valid'. The type of padding algorithm used in the forward prop of the op.</param>
+            <param name="dimRoundingMode">A string from: 'ceil', 'round', 'floor'. The
+            rounding mode used when computing output dimensions if pad is a
+            number. If none is provided, it will not round and error if the output
+            is of fractional size.</param>
+            <param name="padvalue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.avgPool(AlbiruniML.Tensor,System.Int32[],System.Int32[],AlbiruniML.PadType,AlbiruniML.roundingMode,System.Nullable{System.Int32})">
+            <summary>
+            Computes the 2D average pooling of an image.
+            </summary>
+            <param name="x">The input tensor, of rank 4 or rank 3 of shape
+             `[batch, height, width, inChannels]`. If rank 3, batch of 1 is assumed.</param>
+            <param name="filterSize">The filter size, a tuple `[filterHeight, filterWidth]`.</param>
+            <param name="strides"> The strides of the pooling: `[strideHeight, strideWidth]`.</param>
+            <param name="pad">The type of padding algorithm:
+            - `same` and stride 1: output will be of same size as input,
+               regardless of filter size.
+            - `valid`: output will be smaller than input if filter is larger
+               than 1x1.
+            - For more info, see this guide:
+             [https://www.tensorflow.org/api_guides/python/nn#Convolution](
+                 https://www.tensorflow.org/api_guides/python/nn#Convolution)</param>
+            <param name="dimRoundingMode">The rounding mode used when computing output
+            dimensions if pad is a number. If none is provided, it will not round
+            and error if the output is of fractional size.</param>
+            <param name="padvalue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.avgPoolBackprop(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32[],System.Int32[],AlbiruniML.PadType,System.Nullable{System.Int32})">
+            <summary>
+             Computes the backprop of an avg pool.
+            </summary>
+            <param name="dy">The dy error, of rank 4 or rank 3 of shape
+             [batchSize, height, width, channels]. If rank 3, batch of 1 is assumed</param>
+            <param name="input">The input image, of rank 4 or rank 3 of shape
+            [batchSize, height, width, channels]. If rank 3, batch of 1 is assumed</param>
+            <param name="filterSize">The filter size, a tuple [filterHeight, filterWidth].</param>
+            <param name="strides">The strides of the pooling: [strideHeight, strideWidth].</param>
+            <param name="pad"> A string from: 'same', 'valid'. The type of padding algorithm used in the forward prop of the op.</param>
+            <param name="padvalue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.logSumExp(AlbiruniML.Tensor,System.Int32[],System.Boolean)">
+            <summary>
+            Computes the log(sum(exp(elements across the reduction dimensions)).
+            Reduces the input along the dimensions given in `axis`. Unless `keepDims`
+            is true, the rank of the array is reduced by 1 for each entry in `axis`.
+            If `keepDims` is true, the reduced dimensions are retained with length 1.
+            If `axis` has no entries, all dimensions are reduced, and an array with a
+            single element is returned.
+            </summary> 
+            <param name="x">The input tensor</param>
+            <param name="axis">axis The dimension(s) to reduce. If null (the default),
+            reduces all dimensions.</param>
+            <param name="keepDims">If true, retains reduced dimensions with length  of 1. Defaults to false.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.sum(AlbiruniML.Tensor,System.Int32[],System.Boolean)">
+            <summary>
+             Computes the sum of elements across dimensions of a `Tensor`.
+             Reduces the input along the dimensions given in `axes`. Unless `keepDims`
+             is true, the rank of the `Tensor` is reduced by 1 for each entry in `axes`.
+             If `keepDims` is true, the reduced dimensions are retained with length 1.
+             If axes has no entries, all dimensions are reduced, and a `Tensor` with a
+             single element is returned.
+            </summary> 
+            <param name="x">The input tensor to compute the sum over. If the dtype is `bool`
+            it will be converted to `int32` and the output dtype will be `int32`.</param>
+            <param name="axis">The dimension(s) to reduce. By default it reduces all dimensions.</param>
+            <param name="keepDims">If true, retains reduced dimensions with size 1.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.mean(AlbiruniML.Tensor,System.Int32[],System.Boolean)">
+            <summary>
+            Computes the mean of elements across dimensions of a `Tensor`.
+            Reduces `x` along the dimensions given in `axis`. Unless `keepDims` is
+            true, the rank of the `Tensor` is reduced by 1 for each entry in `axis`.
+            If `keepDims` is true, the reduced dimensions are retained with length 1.
+            If `axis` has no entries, all dimensions are reduced, and a `Tensor` with
+            a single element is returned.
+            </summary> 
+            <param name="xtensor">The input tensor.</param>
+            <param name="axis">The dimension(s) to reduce. By default it reduces all dimensions.</param>
+            <param name="keepDims">If true, retains reduced dimensions with size 1.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.min(AlbiruniML.Tensor,System.Int32[],System.Boolean)">
+            <summary>
+            Computes the minimum value from the input.
+            Reduces the input along the dimensions given in `axes`. Unless `keepDims`
+            is true, the rank of the array is reduced by 1 for each entry in `axes`.
+            If `keepDims` is true, the reduced dimensions are retained with length 1.
+            If `axes` has no entries, all dimensions are reduced, and an array with a
+            single element is returned.
+            </summary> 
+            <param name="x">The input Tensor.</param>
+            <param name="axis">The dimension(s) to reduce. By default it reduces all dimensions.</param>
+            <param name="keepDims">If true, retains reduced dimensions with size 1.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.max(AlbiruniML.Tensor,System.Int32[],System.Boolean)">
+             <summary>
+             Computes the maximum of elements across dimensions of a `Tensor`.
+            
+             Reduces the input along the dimensions given in `axes`. Unless `keepDims`
+             is true, the rank of the `Tensor` is reduced by 1 for each entry in `axes`.
+             If `keepDims` is true, the reduced dimensions are retained with length 1.
+             If `axes` has no entries, all dimensions are reduced, and an `Tensor` with
+             a single element is returned.
+             </summary> 
+             <param name="x">The input tensor.</param>
+             <param name="axis">The dimension(s) to reduce. By default it reduces all dimensions.</param>
+             <param name="keepDims">If true, retains reduced dimensions with size 1.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.argMin(AlbiruniML.Tensor,System.Int32[])">
+            <summary>
+            Returns the indices of the minimum values along an `axis`.
+            
+            The result has the same shape as `input` with the dimension along `axis`
+            removed.
+            </summary> 
+            <param name="x">The input tensor.</param>
+            <param name="axis">The dimension to reduce. Defaults to 0 (outer-most dimension).</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.argMax(AlbiruniML.Tensor,System.Int32[])">
+            <summary>
+            Returns the indices of the maximum values along an `axis`.
+            
+            The result has the same shape as `input` with the dimension along `axis`
+            removed.
+            </summary> 
+            <param name="x">The input tensor.</param>
+            <param name="axis">The dimension to reduce. Defaults to 0 (outer-most dimension).</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.moments(AlbiruniML.Tensor,System.Int32[],System.Boolean)">
+            <summary>
+            Calculates the mean and variance of `x`. The mean and variance are
+            calculated by aggregating the contents of `x` across `axes`. If `x` is
+            1-D and `axes = [0]` this is just the mean and variance of a vector.
+            </summary>
+            <param name="x">The input tensor.</param>
+            <param name="axis">The dimension(s) along with to compute mean and
+            variance. By default it reduces all dimensions.</param>
+            <param name="keepDims">If true, the moments have the same dimensionality as the
+            input.</param>
+            <returns>An WeakReference with two keys: `mean` and `variance`.</returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.any(AlbiruniML.Tensor,System.Int32[],System.Boolean)">
+            <summary>
+            Computes the logical or of elements across dimensions of a `Tensor`.
+            Reduces the input along the dimensions given in `axes`. Unless `keepDims`
+            is true, the rank of the `Tensor` is reduced by 1 for each entry in `axes`.
+            If `keepDims` is true, the reduced dimensions are retained with length 1.
+            If `axes` has no entries, all dimensions are reduced, and an `Tensor` with
+            a single element is returned.
+            </summary>
+            <param name="x">The input tensor. Must be of dtype bool.</param>
+            <param name="axis">The dimension(s) to reduce. By default it reduces
+                all dimensions.</param>
+            <param name="keepDims">If true, retains reduced dimensions with size 1.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.all(AlbiruniML.Tensor,System.Int32[],System.Boolean)">
+            <summary>
+            Computes the logical and of elements across dimensions of a `Tensor`.
+            
+            Reduces the input along the dimensions given in `axes`. Unless `keepDims`
+            is true, the rank of the `Tensor` is reduced by 1 for each entry in `axes`.
+            If `keepDims` is true, the reduced dimensions are retained with length 1.
+            If `axes` has no entries, all dimensions are reduced, and an `Tensor` with
+            a single element is returned.
+            </summary>
+            <param name="x">The input tensor. Must be of dtype bool.</param>
+            <param name="axis">The dimension(s) to reduce. By default it reduces
+              all dimensions.</param>
+            <param name="keepDims">If true, retains reduced dimensions with size 1.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.reverse1d(AlbiruniML.Tensor)">
+            <summary>
+             Reverses a `1D Tensor` along a specified axis
+            </summary>
+            <param name="x">The input tensor to be reversed.</param> 
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.reverse2d(AlbiruniML.Tensor,System.Int32[])">
+            <summary>
+             Reverses a `2D Tensor` along a specified axis
+            </summary>
+            <param name="x">The input tensor to be reversed.</param>
+            <param name="axis">The set of dimensions to reverse. Must be in the
+             range [-rank(x), rank(x)). Defaults to all axes.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.reverse3d(AlbiruniML.Tensor,System.Int32[])">
+            <summary>
+             Reverses a `3D Tensor` along a specified axis
+            </summary>
+            <param name="x">The input tensor to be reversed.</param>
+            <param name="axis">The set of dimensions to reverse. Must be in the
+             range [-rank(x), rank(x)). Defaults to all axes.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.reverse4d(AlbiruniML.Tensor,System.Int32[])">
+            <summary>
+             Reverses a `4D Tensor` along a specified axis
+            </summary>
+            <param name="x">The input tensor to be reversed.</param>
+            <param name="axis">The set of dimensions to reverse. Must be in the
+             range [-rank(x), rank(x)). Defaults to all axes.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.reverse(AlbiruniML.Tensor,System.Int32[])">
+            <summary>
+            Reverses a `Tensor` along a specified axis.
+            </summary>
+            <param name="x">The input tensor to be reversed.</param>
+            <param name="axis">The set of dimensions to reverse. Must be in the
+             range [-rank(x), rank(x)). Defaults to all axes.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.slice1d(AlbiruniML.Tensor,System.Int32,System.Int32)">
+            <summary>
+            Extracts a 1D slice from 1D array starting at coordinates `begin` and is
+            of length `size`. See `slice` for details.
+            </summary>   
+        </member>
+        <member name="M:AlbiruniML.Ops.slice2d(AlbiruniML.Tensor,System.Int32[],System.Int32[])">
+            <summary>
+            Extracts a 2D slice from 2D array starting at coordinates `begin` and is
+            of length `size`. See `slice` for details.
+            </summary>   
+        </member>
+        <member name="M:AlbiruniML.Ops.slice3d(AlbiruniML.Tensor,System.Int32[],System.Int32[])">
+            <summary>
+            Extracts a 3D slice from 3D array starting at coordinates `begin` and is
+            of length `size`. See `slice` for details.
+            </summary>   
+        </member>
+        <member name="M:AlbiruniML.Ops.slice4d(AlbiruniML.Tensor,System.Int32[],System.Int32[])">
+            <summary>
+            Extracts a 4D slice from 4D array starting at coordinates `begin` and is
+            of length `size`. See `slice` for details.
+            </summary>   
+        </member>
+        <member name="M:AlbiruniML.Ops.slice(AlbiruniML.Tensor,System.Int32[],System.Int32[])">
+             <summary>
+            Extracts a slice from a `Tensor` starting at coordinates `begin`
+            and is of size `size`.
+             </summary> 
+             <param name="x">The input `Tensor` to slice from.</param>
+             <param name="begin">
+             The coordinates to start the slice from. The length can be
+             less than the rank of x - the rest of the axes will have implicit 0 as
+             start. Can also be a single number, in which case it specifies the
+             first axis.
+             </param>
+             <param name="size">
+             The size of the slice. The length can be less than the rank of
+            x - the rest of the axes will have implicit -1. A value of -1 requests
+            the rest of the dimensions in the axis. Can also be a single number,
+            in which case it specifies the size of the first axis.
+             </param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.softmax(AlbiruniML.Tensor,System.Int32)">
+            <summary>
+            Computes the softmax normalized vector given the logits.
+            </summary>
+            <param name="logitst">The logits array.</param>
+            <param name="dim">The dimension softmax would be performed on. Defaults to `-1`
+              which indicates the last dimension.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.stridedSlice(AlbiruniML.Tensor,System.Int32[],System.Int32[],System.Int32[],System.Int32,System.Int32)">
+             <summary>
+             Extracts a strided slice of a tensor.
+            
+             Roughly speaking, this op extracts a slice of size (end-begin)/stride from
+             the given input_ tensor. Starting at the location specified by begin the
+             slice continues by adding stride to the index until all dimensions are not
+             less than end. Note that a stride can be negative, which causes a reverse
+             slice.
+             </summary>
+             <param name="x">The tensor to stride slice.</param>
+             <param name="begin">The coordinates to start the slice from.</param>
+             <param name="end">The coordinates to end the slice at.</param>
+             <param name="strides">The size of the slice.</param>
+             <param name="beginMask">If the ith bit of begin_mask is set, begin[i] is ignored
+              and the fullest possible range in that dimension is used instead.</param>
+             <param name="endMask">If the ith bit of end_mask is set, end[i] is ignored
+              and the fullest possible range in that dimension is used instead.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.transpose(AlbiruniML.Tensor,System.Int32[])">
+            <summary>
+             Transposes the `Tensor`. Permutes the dimensions according to `perm`.
+             The returned `Tensor`'s dimension `i` will correspond to the input
+            dimension `perm[i]`. If `perm` is not given, it is set to `[n-1...0]`,
+            where `n` is the rank of the input `Tensor`. Hence by default, this
+            operation performs a regular matrix transpose on 2-D input `Tensor`s.
+            </summary>
+            <param name="x">The tensor to transpose.</param>
+            <param name="perm">The permutation of the dimensions of a.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.neg(AlbiruniML.Tensor)">
+            <summary>
+             Computes `-1 * x` element-wise.
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.ceil(AlbiruniML.Tensor)">
+            <summary>
+            Computes ceiling of input `Tensor` element-wise: `ceil(x)`
+            </summary>
+            <param name="x">The input Tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.floor(AlbiruniML.Tensor)">
+            <summary>
+             Computes floor of input `Tensor` element-wise: `floor(x)`.
+            </summary>
+            <param name="x">The input Tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.sign(AlbiruniML.Tensor)">
+            <summary>
+            Returns an element-wise indication of the sign of a number.
+            </summary>
+            <param name="x">The input Tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.round(AlbiruniML.Tensor)">
+            <summary>
+               * Computes round of input `Tensor` element-wise: `round(x)`.
+            It implements banker's rounding.
+            </summary>
+            <param name="x">The input Tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.exp(AlbiruniML.Tensor)">
+            <summary>
+            Computes exponential of the input `Tensor` element-wise. `e ^ x`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.expm1(AlbiruniML.Tensor)">
+            <summary>
+            Computes exponential of the input `Tensor` minus one element-wise.
+            `e ^ x - 1`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.log(AlbiruniML.Tensor)">
+            <summary>
+            Computes natural logarithm of the input `Tensor` element-wise: `ln(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.log1p(AlbiruniML.Tensor)">
+            <summary>
+            Computes natural logarithm of the input `Tensor` plus one
+            element-wise: `ln(1 + x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.sqrt(AlbiruniML.Tensor)">
+            <summary>
+            Computes square root of the input `Tensor` element-wise: `y = sqrt(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.rsqrt(AlbiruniML.Tensor)">
+            <summary>
+             Computes reciprocal of square root of the input `Tensor` element-wise:
+            `y = 1 / sqrt(x)`
+            </summary>
+            <param name="x"> The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.square(AlbiruniML.Tensor)">
+            <summary>
+            Computes square of `x` element-wise: `x ^ 2`
+            </summary>
+            <param name="x">The input Tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.reciprocal(AlbiruniML.Tensor)">
+            <summary>
+             Computes reciprocal of x element-wise: `1 / x`
+            `y = 1 / sqrt(x)`
+            </summary>
+            <param name="x"> The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.abs(AlbiruniML.Tensor)">
+            <summary>
+            Computes absolute value element-wise: `abs(x)`
+            </summary>
+            <param name="x">The input Tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.clipByValue(AlbiruniML.Tensor,System.Single,System.Single)">
+            <summary>
+             Clips values element-wise. `max(min(x, clipValueMax), clipValueMin)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <param name="clipValueMin">Lower-bound of range to be clipped to.</param>
+            <param name="clipValueMax">Upper-bound of range to be clipped to.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.relu(AlbiruniML.Tensor)">
+            <summary>
+             Computes rectified linear element-wise: `max(x, 0)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.elu(AlbiruniML.Tensor)">
+            <summary>
+             Computes exponential linear element-wise, `x > 0 ? e ^ x - 1 : 0`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.selu(AlbiruniML.Tensor)">
+            <summary>
+            Computes scaled exponential linear element-wise.
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.leakyRelu(AlbiruniML.Tensor,System.Single)">
+            <summary>
+             Computes leaky rectified linear element-wise.
+                  See
+            [http://web.stanford.edu/~awni/papers/relu_hybrid_icml2013_final.pdf](
+                http://web.stanford.edu/~awni/papers/relu_hybrid_icml2013_final.pdf)
+            </summary>
+            <param name="x">The input tensor.</param>
+            <param name="alpha">The scaling factor for negative values, defaults to 0.2.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.prelu(AlbiruniML.Tensor,AlbiruniML.Tensor)">
+            <summary>
+            Computes leaky rectified linear element-wise with parametric alphas.
+            </summary>
+            <param name="x">The input tensor.</param>
+            <param name="alpha">Scaling factor for negative values.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.sigmoid(AlbiruniML.Tensor)">
+            <summary>
+             Computes sigmoid element-wise, `1 / (1 + exp(-x))`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.logSigmoid(AlbiruniML.Tensor)">
+            <summary>
+            Computes log sigmoid of the input `Tensor` element-wise:
+            `logSigmoid(x)`. For numerical stability, we use `-alb.softplus(-x)`.
+            </summary>
+            <param name="x"> The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.softplus(AlbiruniML.Tensor)">
+            <summary>
+            Computes softplus of the input `Tensor` element-wise: `log(exp(x) + 1)`
+            </summary>
+            <param name="x"> The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.sin(AlbiruniML.Tensor)">
+            <summary>
+            Computes sin of the input Tensor element-wise: `sin(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.cos(AlbiruniML.Tensor)">
+            <summary>
+             Computes cos of the input `Tensor` element-wise: `cos(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.tan(AlbiruniML.Tensor)">
+            <summary>
+            Computes tan of the input `Tensor` element-wise, `tan(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.asin(AlbiruniML.Tensor)">
+            <summary>
+            Computes asin of the input `Tensor` element-wise: `asin(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.acos(AlbiruniML.Tensor)">
+            <summary>
+            Computes acos of the input `Tensor` element-wise: `acos(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.atan(AlbiruniML.Tensor)">
+            <summary>
+            Computes atan of the input `Tensor` element-wise: `atan(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.sinh(AlbiruniML.Tensor)">
+            <summary>
+            Computes hyperbolic sin of the input `Tensor` element-wise: `sinh(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.cosh(AlbiruniML.Tensor)">
+            <summary>
+             Computes hyperbolic cos of the input `Tensor` element-wise: `cosh(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.tanh(AlbiruniML.Tensor)">
+            <summary>
+            Computes hyperbolic tangent of the input `Tensor` element-wise: `tanh(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.asinh(AlbiruniML.Tensor)">
+            <summary>
+            Computes inverse hyperbolic sin of the input `Tensor` element-wise:
+            `asinh(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.acosh(AlbiruniML.Tensor)">
+             <summary>
+              Computes the inverse hyperbolic cos of the input `Tensor` element-wise:
+            `acosh(x)`
+             </summary>
+             <param name="x">The input tensor.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.atanh(AlbiruniML.Tensor)">
+            <summary>
+            Computes inverse hyperbolic tan of the input `Tensor` element-wise:
+            `atanh(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.erf(AlbiruniML.Tensor)">
+            <summary>
+            Computes gause error function of the input `Tensor` element-wise:
+            `erf(x)`
+            </summary>
+            <param name="x">The input tensor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.step(AlbiruniML.Tensor,System.Single)">
+            <summary>
+            Computes step of the input `Tensor` element-wise: `x > 0 ? 1 : alpha * x`
+            </summary>
+            <param name="x"> The input tensor.</param>
+            <param name="alpha">The gradient when input is negative.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.loss.computeWeightedLoss(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Reduction)">
+            <summary>
+            Computes the weighted loss between two tensors.
+            </summary>
+            <param name="losses">Tensor of shape `[batch_size, d1, ... dN]`.</param>
+            <param name="weights"> Tensor whose rank is either 0, or the same rank as
+             `losses`, and must be broadcastable to `losses` (i.e., all
+             dimensions must be either `1`, or the same as the corresponding
+             `losses` dimension).</param>
+            <param name="reduction">Type of reduction to apply to loss. Should be of type
+            `Reduction`</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.loss.absoluteDifference(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Reduction)">
+             <summary>
+              Computes the absolute difference loss between two tensors.
+             </summary>
+             <param name="labels">The ground truth output tensor, same dimensions as
+            'predictions'.</param>
+             <param name="predictions"> The predicted outputs.</param>
+             <param name="weights">Tensor whose rank is either 0, or the same rank as
+               `labels`, and must be broadcastable to `labels` (i.e., all dimensions
+               must be either `1`, or the same as the corresponding `losses`
+               dimension).</param>
+             <param name="reduction">Type of reduction to apply to loss. Should be of type
+             `Reduction`</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.loss.meanSquaredError(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Reduction)">
+            <summary>
+            Computes the mean squared error between two tensors.
+            </summary>
+            <param name="labels">The ground truth output tensor, same dimensions as
+            'predictions'.</param>
+            <param name="predictions"> The predicted outputs.</param>
+            <param name="weights">Tensor whose rank is either 0, or the same rank as
+            `labels`, and must be broadcastable to `labels` (i.e., all dimensions
+            must be either `1`, or the same as the corresponding `losses`
+            dimension).</param>
+            <param name="reduction">Type of reduction to apply to loss. Should be of type
+            `Reduction`</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.loss.cosineDistance(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32,AlbiruniML.Tensor,AlbiruniML.Reduction)">
+            <summary>
+            Computes the cosine distance loss between two tensors.
+            </summary>
+            <param name="labels">The ground truth output tensor, same dimensions as
+            'predictions'.</param>
+            <param name="predictions"> The predicted outputs.</param>
+            <param name="axis">The dimension along which the cosine distance is computed.</param>
+            <param name="weights"> Tensor whose rank is either 0, or the same rank as
+            `labels`, and must be broadcastable to `labels` (i.e., all dimensions
+            must be either `1`, or the same as the corresponding `losses`
+            dimension).</param>
+            <param name="reduction">Type of reduction to apply to loss. Should be of type
+            `Reduction`</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.loss.hingeLoss(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Reduction)">
+            <summary>
+            Computes the Hinge loss between two tensors.
+            </summary>
+            <param name="labels">The ground truth output tensor, same dimensions as
+            'predictions'.</param>
+            <param name="predictions"> The predicted outputs.</param>
+            <param name="weights">Tensor whose rank is either 0, or the same rank as
+            `labels`, and must be broadcastable to `labels` (i.e., all dimensions
+            must be either `1`, or the same as the corresponding `losses`
+            dimension).</param>
+            <param name="reduction">Type of reduction to apply to loss. Should be of type
+            `Reduction`</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.loss.logLoss(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,System.Single,AlbiruniML.Reduction)">
+            <summary>
+            Computes the log loss between two tensors.
+            </summary>
+            <param name="labels">The ground truth output tensor, same dimensions as
+               'predictions'.</param>
+            <param name="predictions">The predicted outputs.</param>
+            <param name="weights">Tensor whose rank is either 0, or the same rank as
+             `labels`, and must be broadcastable to `labels` (i.e., all dimensions
+             must be either `1`, or the same as the corresponding `losses`
+             dimension).</param>
+            <param name="epsilon">A small increment to avoid taking log of zero</param>
+            <param name="reduction">Type of reduction to apply to loss. Should be of type
+              `Reduction`</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.loss.sigmoidCrossEntropy(AlbiruniML.Tensor,AlbiruniML.Tensor,AlbiruniML.Tensor,System.Single,AlbiruniML.Reduction)">
+             <summary>
+             Computes the sigmoid cross entropy loss between two tensors.
+            
+             If labelSmoothing is nonzero, smooth the labels towards 1/2:
+            
+               newMulticlassLabels = multiclassLabels * (1 - labelSmoothing)
+                                    + 0.5 * labelSmoothing
+             </summary>
+             <param name="multiClassLabels">The ground truth output tensor of shape
+             [batch_size, num_classes], same dimensions as 'predictions'.</param>
+             <param name="logits">The predicted outputs.</param>
+             <param name="weights">Tensor whose rank is either 0, or the same rank as
+               `labels`, and must be broadcastable to `labels` (i.e., all dimensions
+               must be either `1`, or the same as the corresponding `losses`
+               dimension).</param>
+             <param name="labelSmoothing">If greater than 0, then smooth the labels.</param>
+             <param name="reduction">Type of reduction to apply to loss. Should be of type
+              `Reduction`</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.loss.softmaxCrossEntropy(AlbiruniML.Tensor,AlbiruniML.Tensor,System.Int32)">
+             <summary>
+            Computes softmax cross entropy between logits and labels.
+            
+             Measures the probability error in discrete classification tasks in which
+             the classes are mutually exclusive (each entry is in exactly one class).
+             For example, each CIFAR-10 image is labeled with one and only one label: an
+             image can be a dog or a truck, but not both.
+            
+             `NOTE`: While the classes are mutually exclusive, their probabilities need
+             not be. All that is required is that each row of labels is a valid
+             probability distribution. If they are not, the computation of the gradient
+             will be incorrect.
+            
+             `WARNING`: This op expects unscaled logits, since it performs a softmax on
+             logits internally for efficiency. Do not call this op with the output of
+             softmax, as it will produce incorrect results.
+            
+             logits and labels must have the same shape, e.g. [batch_size, num_classes]
+             and the same dtype.
+             </summary>
+             <param name="labelst">The labels array.</param>
+             <param name="logitst">The logits array.</param>
+             <param name="dim">The dimension softmax would be performed on. Defaults to `-1`
+                 which indicates the last dimension.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.train.sgd(System.Single)">
+            <summary>
+             Constructs a `SGDOptimizer` that uses stochastic gradient descent.
+            </summary>
+            <param name="learningRate">The learning rate to use for the SGD algorithm.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.train.momentum(System.Single,System.Single,System.Boolean)">
+             <summary>
+              Constructs a `MomentumOptimizer` that uses momentum gradient
+            descent.
+             See
+            [http://proceedings.mlr.press/v28/sutskever13.pdf](
+            http://proceedings.mlr.press/v28/sutskever13.pdf)
+             </summary>
+             <param name="learningRate">The learning rate to use for the Momentum gradient
+            descent algorithm.</param>
+             <param name="momentum">The momentum to use for the momentum gradient descent
+             algorithm.</param>
+             <param name="useNesterov"></param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.train.rmsprop(System.Single,System.Single,System.Single,System.Single,System.Boolean)">
+             <summary>
+              Constructs a `RMSPropOptimizer` that uses RMSProp gradient
+             descent. This implementation uses plain momentum and is not centered
+             version of RMSProp.
+             
+              See
+            [http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf](
+            http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf)
+             </summary>
+             <param name="learningRate">The learning rate to use for the RMSProp gradient
+            descent algorithm.</param>
+             <param name="decay">The discounting factor for the history/coming gradient</param>
+             <param name="momentum">The momentum to use for the RMSProp gradient descent algorithm.</param>
+             <param name="epsilon">Small value to avoid zero denominator.</param>
+             <param name="centered ">If true, gradients are normalized by the estimated
+             variance of the gradient..</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.train.adam(System.Single,System.Single,System.Single,System.Single)">
+             <summary>
+              Constructs a `AdamOptimizer` that uses the Adam algorithm.
+             See [https://arxiv.org/abs/1412.6980](https://arxiv.org/abs/1412.6980)
+             </summary>
+             <param name="learningRate">The learning rate to use for the Adam gradient
+            descent algorithm.</param>
+             <param name="beta1">The exponential decay rate for the 1st moment estimates.</param>
+             <param name="beta2"> The exponential decay rate for the 2nd moment estimates.</param>
+             <param name="epsilon">A small constant for numerical stability.</param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.train.adadelta(System.Single,System.Single,System.Single)">
+            <summary>
+            Constructs a `AdadeltaOptimizer` that uses the Adadelta algorithm.
+            See [https://arxiv.org/abs/1212.5701](https://arxiv.org/abs/1212.5701
+            </summary>
+            <param name="learningRate">The learning rate to use for the Adadelta gradient
+            descent algorithm.</param>
+            <param name="rho">The learning rate decay over each update.</param>
+            <param name="epsilon"> A constant epsilon used to better condition the grad update.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.train.adamax(System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Constructs a `AdamaxOptimizer` that uses the Adamax algorithm.
+            See [https://arxiv.org/abs/1412.6980](https://arxiv.org/abs/1412.6980)
+            </summary>
+            <param name="learningRate">The learning rate to use for the Adamax gradient
+            descent algorithm.</param>
+            <param name="beta1">The exponential decay rate for the 1st moment estimates.</param>
+            <param name="beta2">The exponential decay rate for the 2nd moment estimates.</param>
+            <param name="epsilon">A small constant for numerical stability.</param>
+            <param name="decay">The learning rate decay over each update.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Ops.train.adagrad(System.Single,System.Single)">
+             <summary>
+             Constructs a `AdagradOptimizer` that uses the Adagrad algorithm.
+             See
+             [http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf](
+             http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf)
+             or
+             [http://ruder.io/optimizing-gradient-descent/index.html#adagrad](
+             http://ruder.io/optimizing-gradient-descent/index.html#adagrad)
+             </summary>
+             <param name="learningRate">The learning rate to use for the Adagrad gradient
+            descent algorithm.</param>
+             <param name="initialAccumulatorValue">Starting value for the accumulators, must be
+             positive.</param>
+             <returns></returns>
+        </member>
+        <member name="T:AlbiruniML.TensorBuffer">
+            <summary>
+            A mutable object, similar to `Tensor`, that allows users to set values
+            at locations before converting to an immutable `Tenso
+            </summary>
+        </member>
+        <member name="T:AlbiruniML.Tensor">
+            <summary>
+            A `Tensor` object represents an immutable, multidimensional array of numbers
+            that has a shape .
+            </summary>
+        </member>
+        <member name="T:AlbiruniML.Variable">
+            <summary>
+            A mutable `Tensor`, useful for persisting state, e.g. for training.
+            </summary>
+        </member>
+        <member name="M:AlbiruniML.Util.getReshaped(System.Int32[],System.Int32[],System.Int32)">
+            <summary>
+            Gets the new shape of the input Tensor after it's been reshaped
+            to :
+            [blockShape[0], ..., blockShape[M-1], batch / prod(blockShape),
+            inputShape[1], ..., inputShape[N-1]]
+            
+            See step 1: https://www.tensorflow.org/api_docs/python/tf/batch_to_space_nd
+            </summary>
+            <param name="inputShape"></param>
+            <param name="blockShape"></param>
+            <param name="prod"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Util.getPermuted(System.Int32,System.Int32)">
+             <summary>
+             Gets the permutation that will transpose the dimensions of the
+             reshaped tensor to shape:
+            
+             [batch / prod(block_shape),inputShape[1], blockShape[0], ...,
+             inputShape[M], blockShape[M-1],inputShape[M+1], ..., inputShape[N-1]]
+            
+             see step 2: https://www.tensorflow.org/api_docs/python/tf/batch_to_space_nd
+             </summary>
+             <param name="reshapedRank"></param>
+             <param name="blockShapeRank"></param>
+             <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Util.getReshapedPermuted(System.Int32[],System.Int32[],System.Int32)">
+            <summary>
+             Gets the shape of the reshaped and permuted input Tensor before any cropping
+            is applied.  The new shape will be:
+            
+            [batch / prod(blockShape),inputShape[1] * blockShape[0], ...,
+            inputShape[M] * blockShape[M-1],inputShape[M+1], ..., inputShape[N-1]]
+            
+            See step 3: https://www.tensorflow.org/api_docs/python/tf/batch_to_space_nd
+            </summary>
+            <param name="inputShape"></param>
+            <param name="blockShape"></param>
+            <param name="prod"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Util.getSliceBeginCoords(System.Int32[][],System.Int32)">
+            <summary>
+            Converts the crops argument into the beginning coordinates of a slice
+            operation
+            </summary>
+            <param name="crops"></param>
+            <param name="blockShape"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Util.getSliceSize(System.Int32[],System.Int32[][],System.Int32)">
+            <summary>
+            converts the crops argument into the size of a slice operation.  When
+            combined with getSliceBeginCoords this function allows the reshaped and
+            permuted Tensor to be cropped to its final output shape of:
+            
+            inputShape[1] * blockShape[0] - crops[0,0] - crops[0,1], ...,
+            inputShape[M] * blockShape[M-1] -crops[M-1,0] -
+            crops[M-1,1],inputShape[M+1], ..., inputShape[N-1]]
+            
+            See step 4: https://www.tensorflow.org/api_docs/python/tf/batch_to_space_nd
+            </summary>
+            <param name="uncroppedShape"></param>
+            <param name="crops"></param>
+            <param name="blockShape"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Util.arrayProd(System.Int32[],System.Int32,System.Nullable{System.Int32})">
+            <summary>
+             Calculate the product of an array of numbers.
+            </summary>
+            <param name="array"></param>
+            <param name="begin"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Util.conditionalRound(System.Single,AlbiruniML.roundingMode)">
+            <summary>
+            apply floor, round or ceil rounding on value
+            </summary>
+            <param name="value"></param>
+            <param name="mode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.Util.SqueezeShape(System.Int32[],System.Int32[])">
+            <summary>
+            Reduces the shape by removing all dimensions of shape 1
+            </summary>
+            <param name="shape"></param>
+            <param name="axis"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AlbiruniML.AlbiruniExtension.Slice``1(``0[])">
+            <summary>
+            Get the array slice between the two indexes.
+            ... Inclusive for start index, exclusive for end index.
+            </summary>
+        </member>
+        <member name="M:AlbiruniML.AlbiruniExtension.Slice``1(``0[],System.Int32,System.Int32)">
+            <summary>
+            Get the array slice between the two indexes.
+            ... Inclusive for start index, exclusive for end index.
+            </summary>
+        </member>
+        <member name="M:AlbiruniML.AlbiruniExtension.Slice``1(``0[],System.Int32)">
+            <summary>
+            Get the array slice between the two indexes.
+            ... Inclusive for start index, exclusive for end index.
+            </summary>
+        </member>
+    </members>
+</doc>

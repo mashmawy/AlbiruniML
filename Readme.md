@@ -3,7 +3,7 @@ AlbiruniML is a linear algebra and machine learning library written in pure c# l
 For now only CPU is supported, cblas native support will be added soon and GPU kernel "CUDA" will be also supported.
 # Main Features
   - Only float datatype can be used.
-  - Support NDArray,Tensor operations 
+  - Support NDArray and Tensor operations 
   - Automatic Differentiation
   - Easy to import many of tensorflow models.
 # Building the library

@@ -92,7 +92,7 @@ Action<Tensor, Tensor> test = (Tensor xs, Tensor ys) =>
 
 Finally we start the training process and test the trained variables.
 ```cs
-train(xs1, ys1, 500, () =>
+train(xs1, ys1, 1000, () =>
 { 
     test(xs1, ys1); 
 });
@@ -100,7 +100,7 @@ train(xs1, ys1, 500, () =>
 and the output should be like that:
 ```sh
 Expected : 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
-Got      : 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1,
+Got      : 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
 ```
 and here is the full example :
 ```cs
@@ -167,7 +167,7 @@ namespace SimpleExample
                 }
             };
 
-            train(xs1, ys1, 500, () =>
+            train(xs1, ys1, 1000, () =>
             {
                 test(xs1, ys1); 
             });

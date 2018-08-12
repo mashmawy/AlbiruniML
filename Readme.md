@@ -1,6 +1,6 @@
 # AlbiruniML
 AlbiruniML is a linear algebra and machine learning library written in pure c# langauge, inspired from tensorflow and the great work of tensorflowjs team.
-For now only CPU is supported, cblas native support will be added soon and GPU kernel "CUDA" will be also supported.
+For now only CPU is supported, cblas native support will be added soon and GPU kernel "CUDA" will be also supported in the future.
 # Main Features
   - Only float datatype can be used.
   - Support NDArray and Tensor operations 
@@ -12,8 +12,9 @@ Other platforms is not tested yet.
 
 # Using the library
 Like tensorflow and tensorflowjs, AlbiruniML use Tensor data structure as its basic data structure for all its operations.
-Tensor is a generalization to vectors, matrix, volume or higher dimension array. 
-To use AlbiruniML first use the required namespaces.
+Tensor is a generalization of vectors, matrix, volume or higher dimension array. 
+
+To use AlbiruniML first add the required namespaces.
 ```
 using Albiruni;
 using alb = Albiruni.Ops;
@@ -46,8 +47,11 @@ Func<Tensor, Tensor> model = (Tensor x) =>
 };
 ```
 next we define the training loop and execute minimize function of the optimizer.
+
 Minimize is where the magic happens, we must return a numerical estimate (i.e. loss) of how well we are doing using the current state of the variables we created at the start. 
+
 Here we use meanSquaredError loss function
+
 This optimizer does the 'backward' step of our training data updating variables defined previously in order to minimize the loss.
 ```cs
 Action<Tensor, Tensor, int, Action> train = (Tensor examples, Tensor label, int numIterations, Action done) =>

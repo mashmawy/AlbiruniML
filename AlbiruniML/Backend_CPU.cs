@@ -4,13 +4,14 @@ using System.Linq;
 using System.Data.Common;
 using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics; 
+using System.Diagnostics;
 using ops = AlbiruniML.Ops;
 namespace AlbiruniML
 {
 
     public partial class Backend_CPU : IBackend
     {
+        public int blockSize = 48;
         public Dictionary<WeakReference, float[]> data = new Dictionary<WeakReference, float[]>();
         public static double SELU_SCALEALPHA = 1.7580993408473768599402175208123;
         public static double SELU_SCALE = 1.0507009873554804934193349852946;
@@ -96,7 +97,7 @@ namespace AlbiruniML
             var outShape = Util.computeOutShape(
          a.Shape, b.Shape, 1);
             var buffer = ops.buffer(outShape);
-             
+
             if (a.Shape[0] == 1 && b.Shape[0] == 1)
             {
                 var aVals = a.dataSync();
@@ -1322,74 +1323,57 @@ namespace AlbiruniML
             var padLeft = convInfo.padInfo.left;
             var padTop = convInfo.padInfo.top;
             var y = ops.buffer(convInfo.outShape);
-            var xvals = x.dataSync();
-            var fvals = filter.dataSync();
 
-
-            int fltS0 = filter.Strides[0];
-            int fltS1 = filter.Strides[1];
-            int fltS2 = filter.Strides[2];
-
-
-            int xS0 = x.Strides[0];
-            int xS1 = x.Strides[1];
-            int xS2 = x.Strides[2];
-
-
-            int yS0 = y.strides[0];
-            int yS1 = y.strides[1];
-            int yS2 = y.strides[2];
+            var xVals = x.dataSync();
+            var wVals = filter.dataSync();
+            var yVals = y.values;
 
             for (var b = 0; b < convInfo.batchSize; ++b)
             {
-                for (var d2 = 0; d2 < convInfo.outChannels; ++d2)
+                var xOffset1 = b * x.Strides[0];
+                var yOffset1 = b * y.strides[0];
+                for (var yR = 0; yR < convInfo.outHeight; ++yR)
                 {
-                    for (var yR = 0; yR < convInfo.outHeight; ++yR)
+                    var yOffset2 = yOffset1 + yR * y.strides[1];
+                    var xRCorner = yR * convInfo.strideHeight - padLeft;
+                    for (var wR = 0; wR < filterHeight; wR++)
                     {
-                        var xRCorner = yR * convInfo.strideHeight - padLeft;
+                        var xR = xRCorner + wR * dilationHeight;
+                        if (xR < 0 || xR >= convInfo.inHeight)
+                        {
+                            continue;
+                        }
+                        var wOffset1 = wR * filter.Strides[0];
+                        var xOffset2 = xOffset1 + xR * x.Strides[1];
                         for (var yC = 0; yC < convInfo.outWidth; ++yC)
                         {
+                            var yOffset3 = yOffset2 + yC * convInfo.outChannels;
                             var xCCorner = yC * convInfo.strideWidth - padTop;
-
-                            float dotProd = 0;
-                            for (var wR = 0; wR < filterHeight; wR++)
+                            for (var wC = 0; wC < filterWidth; wC++)
                             {
-                                var xR = xRCorner + wR * dilationHeight;
-
-                                if (xR < 0 || xR >= convInfo.inHeight)
+                                var xC = xCCorner + wC * dilationWidth;
+                                if (xC < 0 || xC >= convInfo.inWidth)
                                 {
                                     continue;
                                 }
-
-                                for (var wC = 0; wC < filterWidth; wC++)
+                                var wOffset2 = wOffset1 + wC * filter.Strides[1];
+                                var xOffset3 = xOffset2 + xC * convInfo.inChannels;
+                                var wOffset3 = wOffset2;
+                                for (var d1 = 0; d1 < convInfo.inChannels; ++d1)
                                 {
-                                    var xC = xCCorner + wC * dilationWidth;
-
-                                    if (xC < 0 || xC >= convInfo.inWidth)
+                                    var xVal = xVals[xOffset3 + d1];
+                                    for (var d2 = 0; d2 < convInfo.outChannels; ++d2)
                                     {
-                                        continue;
+                                        yVals[yOffset3 + d2] += xVal * wVals[wOffset3 + d2];
                                     }
-
-                                    for (var d1 = 0; d1 < convInfo.inChannels; ++d1)
-                                    {
-
-                                        var pixel = xvals[(b * xS0) + (xR * xS1) + (xC * xS2) + d1];
-
-
-                                        var weight = fvals[(wR * fltS0) +
-                                            (wC * fltS1) + (d1 * fltS2) + d2];
-                                        dotProd += (float)pixel * (float)weight;
-                                    }
+                                    wOffset3 += convInfo.outChannels;
                                 }
                             }
-                            y.values[(b * yS0) + (yR * yS1) + (yC * yS2) + d2] = dotProd;
                         }
                     }
                 }
-
             }
             return y.toTensor();
-
         }
 
         public Tensor conv2dDerInput(Tensor dy, Tensor filter, Conv2DInfo convInfo)
@@ -1422,23 +1406,24 @@ namespace AlbiruniML
             var strideWidth = convInfo.strideWidth;
             var topPad = filterHeight - 1 - convInfo.padInfo.top;
             var leftPad = filterWidth - 1 - convInfo.padInfo.left;
+
             for (var b = 0; b < batchSize; ++b)
             {
                 for (var d1 = 0; d1 < inChannels; ++d1)
                 {
                     for (var xR = 0; xR < inHeight; ++xR)
                     {
-                        var xRCorner = xR - leftPad;
-                        var xRMin = (int)Math.Max(0, Math.Ceiling(xRCorner / (float)strideHeight));
-                        var yRMax = (int)Math.Min(
-                            outHeight, (filterHeight + xRCorner) / strideHeight);
+                        var xRCorner = xR - topPad;
+                        var xRMin = (int)Math.Max(0, Math.Ceiling((double)xRCorner / strideHeight));
+                        var yRMax = (int)
+                            Math.Min(outHeight, (filterHeight + xRCorner) / strideHeight);
 
                         for (var xC = 0; xC < inWidth; ++xC)
                         {
-                            var xCCorner = xC - topPad;
-                            var xCMin = (int)Math.Max(0, Math.Ceiling(xCCorner / (float)strideWidth));
-                            var yCMax = (int)Math.Min(
-                        outWidth, (filterWidth + xCCorner) / strideWidth);
+                            var xCCorner = xC - leftPad;
+                            var xCMin = (int)Math.Max(0, Math.Ceiling((double)xCCorner / strideWidth));
+                            var yCMax = (int)
+                                Math.Min(outWidth, (filterWidth + xCCorner) / strideWidth);
 
                             var dotProd = 0.0f;
                             for (var yR = xRMin; yR < yRMax; ++yR)
@@ -1450,8 +1435,7 @@ namespace AlbiruniML
                                     var wC = yC * strideWidth - xCCorner;
                                     var dyOffset = dyS0 * b + dyS1 * yR + dyS2 * yC;
                                     var fltOffset = fltS0 * (filterHeight - 1 - wR) +
-                                      fltS1 * (filterWidth - 1 - wC) +
-                                      fltS2 * d1;
+                                        fltS1 * (filterWidth - 1 - wC) + fltS2 * d1;
 
                                     for (var d2 = 0; d2 < outChannels; ++d2)
                                     {
@@ -1528,67 +1512,52 @@ namespace AlbiruniML
             var padTop = convInfo.padInfo.top;
             var chMul = convInfo.outChannels / convInfo.inChannels;
             var y = ops.buffer(convInfo.outShape);
-            var xvals = x.dataSync();
-            var fvals = filter.dataSync();
-
-
-            int fltS0 = filter.Strides[0];
-            int fltS1 = filter.Strides[1];
-            int fltS2 = filter.Strides[2];
-
-
-            int xS0 = x.Strides[0];
-            int xS1 = x.Strides[1];
-            int xS2 = x.Strides[2];
-
-
-            int yS0 = y.strides[0];
-            int yS1 = y.strides[1];
-            int yS2 = y.strides[2];
+            var xVals = x.dataSync();
+            var wVals = filter.dataSync();
+            var yVals = y.values;
 
             for (var b = 0; b < convInfo.batchSize; ++b)
             {
-                for (var d1 = 0; d1 < convInfo.inChannels; ++d1)
+                var xOffset1 = b * x.Strides[0];
+                var yOffset1 = b * y.strides[0];
+                for (var yR = 0; yR < convInfo.outHeight; ++yR)
                 {
-                    for (var yR = 0; yR < convInfo.outHeight; ++yR)
+                    var yOffset2 = yOffset1 + yR * y.strides[1];
+                    var xRCorner = yR * convInfo.strideHeight - padLeft;
+                    for (var wR = 0; wR < filterHeight; ++wR)
                     {
-                        var xRCorner = yR * convInfo.strideHeight - padLeft;
+                        var xR = xRCorner + wR * dilationHeight;
+                        if (xR < 0 || xR >= convInfo.inHeight)
+                        {
+                            continue;
+                        }
+                        var wOffset1 = wR * filter.Strides[0];
+                        var xOffset2 = xOffset1 + xR * x.Strides[1];
                         for (var yC = 0; yC < convInfo.outWidth; ++yC)
                         {
+                            var yOffset3 = yOffset2 + yC * y.strides[2];
                             var xCCorner = yC * convInfo.strideWidth - padTop;
-                            for (var q = 0; q < chMul; ++q)
+                            for (var wC = 0; wC < filterWidth; ++wC)
                             {
-                                float dotProd = 0;
-                                for (var wR = 0; wR < filterHeight; ++wR)
+                                var xC = xCCorner + wC * dilationWidth;
+                                if (xC < 0 || xC >= convInfo.inWidth)
                                 {
-                                    var xR = xRCorner + wR * dilationHeight;
-
-                                    if (xR < 0 || xR >= convInfo.inHeight)
-                                    {
-                                        continue;
-                                    }
-
-                                    for (var wC = 0; wC < filterWidth; ++wC)
-                                    {
-                                        var xC = xCCorner + wC * dilationWidth;
-
-                                        if (xC < 0 || xC >= convInfo.inWidth)
-                                        {
-                                            continue;
-                                        }
-
-
-
-                                        var pixel = xvals[(b * xS0) + (xR * xS1) + (xC * xS2) + d1];
-                                        // var pixel = x.Get(b, xR, xC, d1);
-
-                                        var weight = fvals[(wR * fltS0) + (wC * fltS1) + (d1 * fltS2) + q];
-                                        //  var weight =  filter.Get(wR, wC, d1, q);
-                                        dotProd += (float)pixel * (float)weight;
-                                    }
+                                    continue;
                                 }
-                                //  y.Set(dotProd, b, yR, yC, d1 * chMul + q); 
-                                y.values[(b * yS0) + (yR * yS1) + (yC * yS2) + d1 * chMul + q] = dotProd;
+                                var wOffset2 = wOffset1 + wC * filter.Strides[1];
+                                var xOffset3 = xOffset2 + xC * convInfo.inChannels;
+                                var yOffset4 = yOffset3;
+                                var wOffset3 = wOffset2;
+                                for (var d1 = 0; d1 < convInfo.inChannels; ++d1)
+                                {
+                                    var xVal = xVals[xOffset3 + d1];
+                                    for (var q = 0; q < chMul; ++q)
+                                    {
+                                        yVals[yOffset4 + q] += xVal * wVals[wOffset3 + q];
+                                    }
+                                    yOffset4 += chMul;
+                                    wOffset3 += chMul;
+                                }
                             }
                         }
                     }
@@ -1599,9 +1568,135 @@ namespace AlbiruniML
 
         }
 
+        public Tensor depthwiseConv2DDerInput(Tensor dy, Tensor filter, Conv2DInfo convInfo)
+        {
+            var dx = ops.buffer(convInfo.inShape);
+            var dxValues = dx.values;
+            int dxS0 = dx.strides[0];
+            int dxS1 = dx.strides[1];
+            int dxS2 = dx.strides[2];
+            var dyValues = dy.dataSync();
 
-         
-        public Tensor matMul (Tensor a, Tensor b, bool transposeA, bool transposeB)
+            int dyS0 = dy.Strides[0];
+            int dyS1 = dy.Strides[1];
+            int dyS2 = dy.Strides[2];
+            var fltValues = filter.dataSync();
+
+            int fltS0 = filter.Strides[0];
+            int fltS1 = filter.Strides[1];
+            int fltS2 = filter.Strides[2];
+            var batchSize = convInfo.batchSize;
+            var filterHeight = convInfo.filterHeight;
+            var filterWidth = convInfo.filterWidth;
+            var inChannels = convInfo.inChannels;
+            var inHeight = convInfo.inHeight;
+            var inWidth = convInfo.inWidth;
+            var outChannels = convInfo.outChannels;
+            var outHeight = convInfo.outHeight;
+            var outWidth = convInfo.outWidth;
+            var strideHeight = convInfo.strideHeight;
+            var strideWidth = convInfo.strideWidth;
+            var topPad = filterHeight - 1 - convInfo.padInfo.top;
+            var leftPad = filterWidth - 1 - convInfo.padInfo.left;
+            var chMul = outChannels / inChannels;
+
+            for (var b = 0; b < batchSize; ++b)
+            {
+                for (var d1 = 0; d1 < inChannels; ++d1)
+                {
+                    for (var xR = 0; xR < inHeight; ++xR)
+                    {
+                        var xRCorner = xR - topPad;
+                        var xRMin = (int)Math.Max(0, Math.Ceiling((double)xRCorner / strideHeight));
+                        var yRMax = (int)
+                            Math.Min(outHeight, (filterHeight + xRCorner) / strideHeight);
+
+                        for (var xC = 0; xC < inWidth; ++xC)
+                        {
+                            var xCCorner = xC - leftPad;
+                            var xCMin = (int)Math.Max(0, Math.Ceiling((double)xCCorner / strideWidth));
+                            var yCMax = (int)
+                                Math.Min(outWidth, (filterWidth + xCCorner) / strideWidth);
+
+                            var dotProd = 0.0f;
+                            for (var yR = xRMin; yR < yRMax; ++yR)
+                            {
+                                var wR = yR * strideHeight - xRCorner;
+
+                                for (var yC = xCMin; yC < yCMax; ++yC)
+                                {
+                                    var wC = yC * strideWidth - xCCorner;
+                                    var dyOffset = dyS0 * b + dyS1 * yR + dyS2 * yC;
+                                    var fltOffset = fltS0 * (filterHeight - 1 - wR) +
+                                        fltS1 * (filterWidth - 1 - wC) + fltS2 * d1;
+
+                                    for (var dm = 0; dm < chMul; ++dm)
+                                    {
+                                        var d2 = d1 * chMul + dm;
+                                        var pixel = dyValues[dyOffset + d2];
+                                        var weight = fltValues[fltOffset + dm];
+                                        dotProd += pixel * weight;
+                                    }
+                                }
+                            }
+                            dxValues[dxS0 * b + dxS1 * xR + dxS2 * xC + d1] = dotProd;
+                        }
+                    }
+                }
+            }
+            return dx.toTensor();
+        }
+
+        public Tensor depthwiseConv2DDerFilter(Tensor dy, Tensor x, Conv2DInfo convInfo)
+        {
+            var strideHeight = convInfo.strideHeight;
+            var strideWidth = convInfo.strideWidth;
+            var filterHeight = convInfo.filterHeight;
+            var filterWidth = convInfo.filterWidth;
+            var dW = ops.buffer(convInfo.filterShape);
+
+            var leftPad = convInfo.padInfo.left;
+            var topPad = convInfo.padInfo.top;
+            var chMul = convInfo.outChannels / convInfo.inChannels;
+
+            for (var wR = 0; wR < filterHeight; ++wR)
+            {
+                var yRMin = (int)Math.Max(0, Math.Ceiling((double)(topPad - wR) / strideHeight));
+                var yRMax = (int)Math.Min(
+                    convInfo.outHeight, (convInfo.inHeight + topPad - wR) / strideHeight);
+
+                for (var wC = 0; wC < filterWidth; ++wC)
+                {
+                    var yCMin = (int)Math.Max(0, Math.Ceiling((double)(leftPad - wC) / strideWidth));
+                    var yCMax = (int)Math.Min(
+                      convInfo.outWidth, (convInfo.inWidth + leftPad - wC) / strideWidth);
+
+                    for (var d2 = 0; d2 < convInfo.outChannels; ++d2)
+                    {
+                        var d1 = (int)Math.Truncate((double)d2 / chMul);
+                        var dm = d2 % chMul;
+
+                        var dotProd = 0.0f;
+                        for (var b = 0; b < convInfo.batchSize; ++b)
+                        {
+                            for (var yR = yRMin; yR < yRMax; ++yR)
+                            {
+                                var xR = wR + yR * strideHeight - topPad;
+                                for (var yC = yCMin; yC < yCMax; ++yC)
+                                {
+                                    var xC = wC + yC * strideWidth - leftPad;
+                                    dotProd += x.Get(b, xR, xC, d1) * dy.Get(b, yR, yC, d2);
+                                }
+                            }
+                        }
+                        dW.Set(dotProd, wR, wC, d1, dm);
+                    }
+                }
+            }
+            return dW.toTensor();
+        }
+
+        public Tensor matMul(Tensor a, Tensor b, bool transposeA, bool transposeB)
         {
             var sharedDim = transposeA ? a.Shape[0] : a.Shape[1];
             var leftDim = transposeA ? a.Shape[1] : a.Shape[0];
@@ -1643,24 +1738,35 @@ namespace AlbiruniML
             var bOuterEnd = rightDim * bOuterStep;
 
             var result = new float[leftDim * rightDim];
-            int resultIndex = 0;
+           
+            var blockSize = this.blockSize;
 
-
-
-            for (var aOuter = 0; aOuter < aOuterEnd; aOuter += aOuterStep)
+            for (var i0 = 0; i0 < leftDim; i0 += blockSize)
             {
-                for (var bOuter = 0; bOuter < bOuterEnd; bOuter += bOuterStep)
+                for (var j0 = 0; j0 < rightDim; j0 += blockSize)
                 {
-                    var aInner = aOuter;
-                    var bInner = bOuter;
-                    var sum = 0f;
-                    for (var k = 0; k < sharedDim; ++k)
+                    for (var k0 = 0; k0 < sharedDim; k0 += blockSize)
                     {
-                        sum += aValues[aInner] * bValues[bInner];
-                        aInner += aInnerStep;
-                        bInner += bInnerStep;
+                        // for when blockSize doesn't evenly divide the input
+                        var iBlock = Math.Min(i0 + blockSize, leftDim);
+                        var jBlock = Math.Min(j0 + blockSize, rightDim);
+                        var kBlock = Math.Min(k0 + blockSize, sharedDim);
+
+                        for (var i = i0; i < iBlock; i++)
+                        {
+                            for (var j = j0; j < jBlock; j++)
+                            {
+                                var sum = 0.0f;
+
+                                for (var k = k0; k < kBlock; k++)
+                                {
+                                    sum += aValues[i * aOuterStep + k * aInnerStep] *
+                                        bValues[k * bInnerStep + j * bOuterStep];
+                                }
+                                result[i * rightDim + j] += sum;
+                            }
+                        }
                     }
-                    result[resultIndex++] = sum;
                 }
             }
             return Ops.tensor2d(result, leftDim, rightDim);
@@ -1695,18 +1801,18 @@ namespace AlbiruniML
             return result.toTensor();
         }
 
-        public Tensor pad(Tensor x, int[][] paddings, float constantValue)
+        public Tensor pad(Tensor x, int[][] paddings, float varantValue)
         {
             var outShape = paddings.Select(
         (p, i) => p[0] /* beforePad */ + x.Shape[i] + p[1] /* afterPad */).ToArray();
             var start = paddings.Select(p => p[0]).ToArray();
             var xBuffer = x.buffer();
             var buffer = ops.buffer(outShape);
-            if (constantValue != 0)
+            if (varantValue != 0)
             {
                 for (int i = 0; i < buffer.values.Length; i++)
                 {
-                    buffer.values[i] = constantValue;
+                    buffer.values[i] = varantValue;
                 }
             }
             for (int i = 0; i < x.Size; i++)
@@ -2196,21 +2302,45 @@ namespace AlbiruniML
         public Tensor batchNormalization(Tensor x, Tensor mean, Tensor variance, float varianceEpsilon,
             Tensor scale = null, Tensor offset = null)
         {
-            var xValues = x.dataSync() as float[];
-            var meanValues = mean.dataSync() as float[];
-            var varianceValues = variance.dataSync() as float[];
-            var scaleValues = scale != null ? scale.dataSync() as float[] : new float[] { 1 };
-            var offsetValues = offset != null ? offset.dataSync() as float[] : new float[] { 0 };
-            var outValues = new float[xValues.Length];
-            for (int i = 0; i < xValues.Length; i++)
+            var xVals = x.dataSync();
+            var mVals = mean.dataSync();
+            var varVals = variance.dataSync();
+            var sVals = scale != null ? scale.dataSync() : new float[] { 1 };
+            var offVals = offset != null ? offset.dataSync() : new float[] { 0 };
+            var outVals = new float[xVals.Length];
+
+            var offValsLength = offVals.Length;
+            var sValsLength = sVals.Length;
+            var varValsLength = varVals.Length;
+            var mValsLength = mVals.Length;
+
+            var offi = 0;
+            var mi = 0;
+            var si = 0;
+            var vi = 0;
+            for (var i = 0; i < xVals.Length; ++i)
             {
-                outValues[i] = offsetValues[i % offsetValues.Length] +
-                    (xValues[i] - meanValues[i % meanValues.Length]) *
-                scaleValues[i % scaleValues.Length] /
-                (float)Math.Sqrt(
-                    varianceValues[i % varianceValues.Length] + varianceEpsilon);
+                outVals[i] = offVals[offi++] +
+                    (xVals[i] - mVals[mi++]) * sVals[si++] /
+                      (float)Math.Sqrt(varVals[vi++] + varianceEpsilon);
+                if (offi >= offValsLength)
+                {
+                    offi = 0;
+                }
+                if (mi >= mValsLength)
+                {
+                    mi = 0;
+                }
+                if (si >= sValsLength)
+                {
+                    si = 0;
+                }
+                if (vi >= varValsLength)
+                {
+                    vi = 0;
+                }
             }
-            return ops.tensor4d(outValues, x.Shape[0], x.Shape[1], x.Shape[2], x.Shape[3]);
+            return ops.tensor(outVals, x.Shape);
 
         }
 
@@ -2257,7 +2387,7 @@ namespace AlbiruniML
             }
             return output.toTensor();
         }
-          
+
         public Tensor localResponseNormalization4D(Tensor x, float radius, float bias, float alpha, float beta)
         {
             var output = ops.buffer(x.Shape);

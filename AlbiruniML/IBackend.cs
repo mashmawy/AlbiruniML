@@ -30,6 +30,8 @@ namespace AlbiruniML
         Tensor cosh(Tensor x);
         Tensor cumsum(Tensor x, int axis, bool exclusive, bool reverse);
         Tensor depthwiseConv2D(Tensor x, Tensor filter, Conv2DInfo convInfo);
+        Tensor depthwiseConv2DDerInput(Tensor dy, Tensor filter, Conv2DInfo convInfo);
+        Tensor depthwiseConv2DDerFilter(Tensor dy, Tensor x, Conv2DInfo convInfo);
         void disposeData(WeakReference dataId);
         Tensor Divide(Tensor a, Tensor b);
         Tensor elu(Tensor x);

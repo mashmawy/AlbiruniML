@@ -47,14 +47,15 @@ namespace AlbiruniML
             {
                 NamedGradientMap g = new NamedGradientMap();
                 g.gradient = new Dictionary<string, Func<Tensor>>();
-                g.gradient.Add("x", () => {
+                g.gradient.Add("x", () =>
+                {
                     ForwardFunc fb = (IBackend bk, Func<Tensor, Tensor> saved) =>
                     {
                         return bk.resizeBilinearBackprop(dy, batchImages, alignCorners);
                     };
                     return e.runKernel(fb, new Dictionary<string, Tensor>());
-                
-                
+
+
                 });
                 return g;
             };
@@ -440,6 +441,29 @@ namespace AlbiruniML
      input4D.Shape, filter.Shape, strides, dilations, pad, dimRoundingMode,
      true /* depthwise */, ConvDataFormat.channelsLast, padvalue);
 
+            Func<Tensor, List<Tensor>, NamedGradientMap> grad = (Tensor dy,
+                List<Tensor> s) =>
+            {
+                NamedGradientMap g = new NamedGradientMap();
+                g.gradient = new Dictionary<string, Func<Tensor>>();
+                g.gradient.Add("input4D", () =>
+                {
+                    var resg = depthwiseConv2dDerInput(input4D.Shape, dy, filter, strides, pad, dimRoundingMode, padvalue);
+
+                    if (reshapedTo4D)
+                    {
+                        resg = resg.as3D(resg.Shape[1], resg.Shape[2], resg.Shape[3]);
+                    }
+                    return resg;
+                });
+
+                g.gradient.Add("filter", () =>
+                {
+                    return depthwiseConv2dDerFilter(input4D, dy, filter.Shape, strides, pad, dimRoundingMode, padvalue);
+
+                });
+                return g;
+            };
 
             Engine e = ENV.engine;
             ForwardFunc f = (IBackend bk, Func<Tensor, Tensor> saved) =>
@@ -450,7 +474,7 @@ namespace AlbiruniML
             var inputs = new Dictionary<string, Tensor>();
             inputs.Add("input4D", input4D);
             inputs.Add("filter", filter);
-            var res = e.runKernel(f, inputs);
+            var res = e.runKernel(f, inputs, grad);
             if (reshapedTo4D)
             {
                 return res.as3D(res.Shape[1], res.Shape[2], res.Shape[3]);
@@ -460,6 +484,88 @@ namespace AlbiruniML
             return res;
         }
 
+
+
+        static Tensor depthwiseConv2dDerInput(int[] xShape, Tensor dy, Tensor filter,
+            int[] strides, PadType pad, roundingMode dimRoundingMode, Nullable<int> padValue = null)
+        {
+            int[] xShape4D = xShape;
+            Tensor dy4D = null;
+            var reshapedTo4D = false;
+            if (dy.Rank == 3)
+            {
+                reshapedTo4D = true;
+                dy4D = dy.as4D(1, dy.Shape[0], dy.Shape[1], dy.Shape[2]);
+                xShape4D = new int[] { 1, xShape[0], xShape[1], xShape[2] };
+            }
+            else
+            {
+                dy4D = dy as Tensor;
+            }
+
+
+            var inDepth = xShape4D[3];
+            var outDepth = dy4D.Shape[3];
+
+            var dilations = 1;
+
+            var convInfo = Util.computeConv2DInfo(
+                xShape4D, filter.Shape, strides, new int[] { dilations, dilations },
+                pad, dimRoundingMode,
+                false, ConvDataFormat.channelsLast, padValue);
+            Engine e = ENV.engine;
+            ForwardFunc f = (IBackend bk, Func<Tensor, Tensor> saved) =>
+            {
+                return bk.depthwiseConv2DDerInput(dy4D, filter, convInfo);
+            };
+
+            var inputs = new Dictionary<string, Tensor>();
+            inputs.Add("dy4D", dy4D);
+            var res = e.runKernel(f, inputs);
+            if (reshapedTo4D)
+            {
+                return res.as3D(res.Shape[1], res.Shape[2], res.Shape[3]);
+            }
+            return res;
+        }
+
+        static Tensor depthwiseConv2dDerFilter(this Tensor x, Tensor dy, int[] filterShape, int[] strides,
+       PadType pad, roundingMode dimRoundingMode = roundingMode.none, Nullable<int> padValue = null)
+        {
+            Tensor x4D = null;
+            if (x.Rank == 3)
+            {
+                x4D = x.as4D(1, x.Shape[0], x.Shape[1], x.Shape[2]);
+            }
+            else
+            {
+                x4D = x as Tensor;
+            }
+            Tensor dy4D = null;
+            if (dy.Rank == 3)
+            {
+                dy4D = dy.as4D(1, dy.Shape[0], dy.Shape[1], dy.Shape[2]);
+            }
+            else
+            {
+                dy4D = dy as Tensor;
+            }
+
+            var dilations = 1;
+
+            var convInfo = Util.computeConv2DInfo(
+                x4D.Shape, filterShape, strides, new int[] { dilations, dilations }, pad, dimRoundingMode, false, ConvDataFormat.channelsLast, padValue);
+            Engine e = ENV.engine;
+            ForwardFunc f = (IBackend bk, Func<Tensor, Tensor> saved) =>
+            {
+                return bk.depthwiseConv2DDerFilter(x4D, dy4D, convInfo);
+            };
+
+            var inputs = new Dictionary<string, Tensor>();
+            inputs.Add("x4D", x4D);
+            inputs.Add("dy4D", dy4D);
+            return e.runKernel(f, inputs);
+        }
 
         /// <summary>
         /// 2-D convolution with separable filters.
@@ -556,6 +662,6 @@ namespace AlbiruniML
             return res;
         }
 
-      
+
     }
 }

@@ -96,14 +96,9 @@ namespace AlbiruniML
         private static Tensor maxPoolBackprop(Tensor dy, Tensor input, Tensor output, int[] filterSize,
             int[] strides, PadType pad, roundingMode dimRoundingMode, int? padvalue)
         {
-
-
-            Tensor input4D = null;
-            Tensor dy4D = null;
-
-
+             
             var convInfo = Util.computePool2DInfo(
-                input4D.Shape, filterSize, strides, pad, dimRoundingMode, ConvDataFormat.channelsLast, padvalue);
+                input.Shape, filterSize, strides, pad, dimRoundingMode, ConvDataFormat.channelsLast, padvalue);
 
             Engine e = ENV.engine;
             ForwardFunc f = (IBackend bk, Func<Tensor, Tensor> saved) =>
@@ -112,8 +107,8 @@ namespace AlbiruniML
             };
 
             var inputs = new Dictionary<string, Tensor>();
-            inputs.Add("dy4D", dy4D);
-            inputs.Add("input4D", input4D);
+            inputs.Add("dy", dy);
+            inputs.Add("input", input);
             var res = e.runKernel(f, inputs);
 
             return res;

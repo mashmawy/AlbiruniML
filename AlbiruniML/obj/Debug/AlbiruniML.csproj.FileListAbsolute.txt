@@ -1,4 +1,0 @@
-D:\Lap\AlbiruniML\AlbiruniML\bin\Debug\AlbiruniML.dll
-D:\Lap\AlbiruniML\AlbiruniML\bin\Debug\AlbiruniML.pdb
-D:\Lap\AlbiruniML\AlbiruniML\obj\Debug\AlbiruniML.dll
-D:\Lap\AlbiruniML\AlbiruniML\obj\Debug\AlbiruniML.pdb

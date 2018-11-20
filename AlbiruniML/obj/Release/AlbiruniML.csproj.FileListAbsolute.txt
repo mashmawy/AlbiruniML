@@ -1,5 +1,0 @@
-D:\Lap\AlbiruniML\AlbiruniML\bin\Release\AlbiruniML.dll
-D:\Lap\AlbiruniML\AlbiruniML\bin\Release\AlbiruniML.pdb
-D:\Lap\AlbiruniML\AlbiruniML\obj\Release\AlbiruniML.dll
-D:\Lap\AlbiruniML\AlbiruniML\obj\Release\AlbiruniML.pdb
-D:\Lap\AlbiruniML\AlbiruniML\bin\Release\AlbiruniML.XML

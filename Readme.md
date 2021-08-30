@@ -181,6 +181,7 @@ namespace SimpleExample
 
 ```
 # More Examples AlbiruniML
- [Fast Style Transfer](https://github.com/mashmawy/FastStyleTransfer).
- [TinyYolo](https://github.com/mashmawy/TinyYolo).
+  - [Fast Style Transfer](https://github.com/mashmawy/FastStyleTransfer).
+ 
+  - [TinyYolo](https://github.com/mashmawy/TinyYolo).
  
